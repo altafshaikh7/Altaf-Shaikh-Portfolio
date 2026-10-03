@@ -2,6 +2,7 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
 import Skills from "./components/Skills";
+import Projects from "./components/Projects";
 
 function App() {
   return (
@@ -15,10 +16,7 @@ function App() {
 
         <Skills />
 
-        <section
-          id="projects"
-          className="min-h-screen w-full bg-[#F0E4B8]"
-        />
+        <Projects />
 
         <section
           id="hackathons"
