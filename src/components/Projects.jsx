@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SiGithub } from "react-icons/si";
 
 const categories = ["Full Stack", "AI / ML", "Frontend"];
@@ -257,6 +257,34 @@ function Projects() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [direction, setDirection] = useState(1);
 
+  /* =====================================================
+     ENTRANCE ANIMATION TRIGGER (whole section)
+  ===================================================== */
+
+  const sectionRef = useRef(null);
+  const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setRevealed(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    observer.observe(el);
+
+    return () => observer.disconnect();
+  }, []);
+
   // =====================================================
   // FILTER
   // =====================================================
@@ -364,26 +392,39 @@ function Projects() {
 
       <section
         id="projects"
-        className="w-full overflow-hidden bg-[#F0E4B8] px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-28"
+        ref={sectionRef}
+        className={`projects-section w-full overflow-hidden bg-[#F0E4B8] px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-28 ${
+          revealed ? "is-revealed" : ""
+        }`}
       >
         <div className="mx-auto w-full max-w-6xl">
 
           {/* =================================================
-              HEADER
+              HEADER  (About.jsx style)
           ================================================= */}
 
-          <div className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
+          <div className="projects-header flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
 
             <div>
-              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.25em] text-[#596A99] sm:text-xs">
+              <p className="projects-label mb-3 text-[11px] font-semibold uppercase tracking-[0.25em] text-[#596A99] sm:text-xs">
+                <span
+                  className="projects-label-line"
+                  aria-hidden="true"
+                />
                 Selected Work
               </p>
 
-              <h2 className="text-4xl font-black leading-[0.95] tracking-[-0.04em] text-[#3A4A78] sm:text-5xl lg:text-6xl">
-                Projects I've
-                <br />
-                <span className="text-[#596A99]">
-                  built.
+              <h2 className="projects-title text-4xl font-black leading-[0.95] tracking-[-0.04em] text-[#3A4A78] sm:text-5xl lg:text-6xl">
+                <span className="projects-title-mask">
+                  <span className="projects-title-line">
+                    Projects I've
+                  </span>
+                </span>
+
+                <span className="projects-title-mask">
+                  <span className="projects-title-line projects-title-accent">
+                    built.
+                  </span>
                 </span>
               </h2>
             </div>
@@ -392,7 +433,7 @@ function Projects() {
                 CATEGORY BUTTONS
             ================================================= */}
 
-            <div className="flex w-fit max-w-full flex-wrap gap-1 rounded-full border border-[#D9CC9C] bg-white/30 p-1.5 backdrop-blur-sm">
+            <div className="projects-categories flex w-fit max-w-full flex-wrap gap-1 rounded-full border border-[#D9CC9C] bg-white/30 p-1.5 backdrop-blur-sm">
 
               {categories.map((item) => (
                 <button
@@ -428,10 +469,11 @@ function Projects() {
                   : "animate-project-prev"
               }`}
             >
-              {visibleProjects.map((project) => (
+              {visibleProjects.map((project, index) => (
                 <ProjectCard
                   key={project.id}
                   project={project}
+                  index={index}
                   onOpen={() =>
                     setSelectedProject(project)
                   }
@@ -444,7 +486,7 @@ function Projects() {
             ================================================= */}
 
             {totalPages > 1 && (
-              <div className="mt-7 flex justify-end gap-2">
+              <div className="projects-arrows mt-7 flex justify-end gap-2">
 
                 <button
                   type="button"
@@ -509,7 +551,7 @@ function Projects() {
               PAGE INFO
           ================================================= */}
 
-          <div className="mx-auto mt-6 flex max-w-5xl items-center justify-between border-t border-[#D9CC9C] pt-4">
+          <div className="projects-pageinfo mx-auto mt-6 flex max-w-5xl items-center justify-between border-t border-[#D9CC9C] pt-4">
 
             <p className="text-[10px] font-medium text-[#596A99] sm:text-xs">
               {category} Projects
@@ -611,10 +653,273 @@ function Projects() {
             cubic-bezier(0.22, 1, 0.36, 1);
         }
 
+        /* ===============================================
+           HEADER — About.jsx style
+        =============================================== */
+
+        .projects-label {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+
+          opacity: 0;
+          translate: -18px 0;
+
+          transition:
+            opacity
+            0.8s
+            cubic-bezier(0.22, 1, 0.36, 1)
+            0.1s,
+
+            translate
+            0.8s
+            cubic-bezier(0.22, 1, 0.36, 1)
+            0.1s;
+        }
+
+        .is-revealed .projects-label {
+          opacity: 1;
+          translate: 0 0;
+        }
+
+        .projects-label-line {
+          display: inline-block;
+          width: 32px;
+          height: 1px;
+          background: rgba(89, 106, 153, 0.6);
+
+          transform-origin: left center;
+          scale: 0 1;
+
+          transition:
+            scale
+            0.8s
+            cubic-bezier(0.22, 1, 0.36, 1)
+            0.25s;
+        }
+
+        .is-revealed .projects-label-line {
+          scale: 1 1;
+        }
+
+        .projects-title-mask {
+          display: block;
+          overflow: hidden;
+          padding-bottom: 0.12em;
+          margin-bottom: -0.12em;
+        }
+
+        .projects-title-line {
+          display: inline-block;
+          translate: 0 115%;
+
+          transition:
+            translate
+            0.95s
+            cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .projects-title-mask:nth-child(1) .projects-title-line {
+          transition-delay: 0.15s;
+        }
+
+        .projects-title-mask:nth-child(2) .projects-title-line {
+          transition-delay: 0.28s;
+        }
+
+        .is-revealed .projects-title-line {
+          translate: 0 0;
+        }
+
+        .projects-title-accent {
+          color: #596A99;
+
+          background-image:
+            linear-gradient(
+              100deg,
+              #596A99 0%,
+              #596A99 40%,
+              #3A4A78 50%,
+              #596A99 60%,
+              #596A99 100%
+            );
+
+          background-size: 200% 100%;
+          background-position: 0% 50%;
+
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .is-revealed .projects-title-accent {
+          animation:
+            projectsTitleShimmer
+            9s
+            linear
+            1.2s
+            infinite;
+        }
+
+        @keyframes projectsTitleShimmer {
+          from {
+            background-position: 0% 50%;
+          }
+          to {
+            background-position: 200% 50%;
+          }
+        }
+
+        /* ===============================================
+           CATEGORY BUTTONS — slide in from right
+        =============================================== */
+
+        .projects-categories {
+          opacity: 0;
+          translate: 24px 0;
+
+          transition:
+            opacity
+            0.9s
+            cubic-bezier(0.22, 1, 0.36, 1)
+            0.4s,
+
+            translate
+            0.9s
+            cubic-bezier(0.22, 1, 0.36, 1)
+            0.4s;
+        }
+
+        .is-revealed .projects-categories {
+          opacity: 1;
+          translate: 0 0;
+        }
+
+        /* ===============================================
+           PROJECT CARD — scroll entrance
+        =============================================== */
+
+        .project-card {
+          opacity: 0;
+          translate: 0 40px;
+          scale: 0.94;
+          filter: blur(6px);
+
+          transition:
+            opacity
+            0.95s
+            cubic-bezier(0.22, 1, 0.36, 1),
+
+            translate
+            0.95s
+            cubic-bezier(0.22, 1, 0.36, 1),
+
+            scale
+            1s
+            cubic-bezier(0.34, 1.4, 0.64, 1),
+
+            filter
+            0.95s
+            cubic-bezier(0.22, 1, 0.36, 1),
+
+            box-shadow
+            0.4s
+            ease,
+
+            border-color
+            0.4s
+            ease;
+        }
+
+        /* Stagger per card */
+        .is-revealed .project-card {
+          opacity: 1;
+          translate: 0 0;
+          scale: 1;
+          filter: blur(0);
+
+          transition-delay:
+            calc(var(--card-index, 0) * 0.14s + 0.35s);
+        }
+
+        /* ===============================================
+           ARROWS — slide in from right
+        =============================================== */
+
+        .projects-arrows {
+          opacity: 0;
+          translate: 24px 0;
+
+          transition:
+            opacity
+            0.9s
+            cubic-bezier(0.22, 1, 0.36, 1)
+            0.6s,
+
+            translate
+            0.9s
+            cubic-bezier(0.22, 1, 0.36, 1)
+            0.6s;
+        }
+
+        .is-revealed .projects-arrows {
+          opacity: 1;
+          translate: 0 0;
+        }
+
+        /* ===============================================
+           PAGE INFO — fade + rise
+        =============================================== */
+
+        .projects-pageinfo {
+          opacity: 0;
+          translate: 0 22px;
+
+          transition:
+            opacity
+            0.9s
+            cubic-bezier(0.22, 1, 0.36, 1)
+            0.7s,
+
+            translate
+            0.9s
+            cubic-bezier(0.22, 1, 0.36, 1)
+            0.7s;
+        }
+
+        .is-revealed .projects-pageinfo {
+          opacity: 1;
+          translate: 0 0;
+        }
+
+        /* ===============================================
+           REDUCED MOTION
+        =============================================== */
+
         @media (prefers-reduced-motion: reduce) {
           .animate-project-next,
           .animate-project-prev {
             animation: none;
+          }
+
+          .projects-label,
+          .projects-title-line,
+          .projects-label-line,
+          .projects-categories,
+          .project-card,
+          .projects-arrows,
+          .projects-pageinfo {
+            opacity: 1 !important;
+            translate: 0 0 !important;
+            scale: 1 !important;
+            filter: none !important;
+            transition: none !important;
+          }
+
+          .projects-title-accent {
+            animation: none !important;
+            -webkit-text-fill-color: #596A99;
+            background: none;
           }
         }
       `}</style>
@@ -626,16 +931,16 @@ function Projects() {
 // PROJECT CARD
 // =========================================================
 
-function ProjectCard({ project, onOpen }) {
+function ProjectCard({ project, index = 0, onOpen }) {
   return (
     <article
       onClick={onOpen}
-      className="group min-w-0 cursor-pointer overflow-hidden rounded-[22px] border border-[#D9CC9C]/80 bg-white/20 p-2 shadow-[0_15px_45px_rgba(58,74,120,0.07)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_22px_55px_rgba(58,74,120,0.13)] sm:rounded-[24px] sm:p-2.5"
+      style={{ "--card-index": index }}
+      className="project-card group min-w-0 cursor-pointer overflow-hidden rounded-[22px] border border-[#D9CC9C]/80 bg-white/20 p-2 shadow-[0_15px_45px_rgba(58,74,120,0.07)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_22px_55px_rgba(58,74,120,0.13)] sm:rounded-[24px] sm:p-2.5"
     >
 
       {/* =================================================
           CATEGORY
-          IMAGE KE UPAR NAHI AAYEGA
       ================================================= */}
 
       <div className="mb-2.5 px-1 sm:mb-3 sm:px-1.5">
@@ -648,11 +953,6 @@ function ProjectCard({ project, onOpen }) {
 
       {/* =================================================
           IMAGE
-
-          ORIGINAL RATIO
-          NO CROP
-          NO FIXED HEIGHT
-          NO aspect-ratio
       ================================================= */}
 
       <div className="w-full overflow-hidden rounded-[17px] bg-[#D9CC9C] sm:rounded-[19px]">
@@ -848,8 +1148,6 @@ function ProjectModal({ project, onClose }) {
 
       {/* =================================================
           MODAL
-
-          NO INTERNAL SCROLL
       ================================================= */}
 
       <div
@@ -874,15 +1172,6 @@ function ProjectModal({ project, onClose }) {
 
         {/* =================================================
             MODAL IMAGE
-
-            IMPORTANT:
-
-            w-auto
-            h-auto
-            max-w-full
-            max-h
-
-            IMAGE WILL NEVER BE CROPPED.
         ================================================= */}
 
         <div className="flex w-full items-center justify-center overflow-hidden bg-[#D9CC9C]">
@@ -903,7 +1192,7 @@ function ProjectModal({ project, onClose }) {
             />
           ) : (
             /* =================================================
-               FALLBACK
+              FALLBACK
             ================================================= */
 
             <div className="relative flex h-[170px] w-full items-center justify-center overflow-hidden bg-gradient-to-br from-[#3A4A78] via-[#596A99] to-[#26365F] sm:h-[210px]">
@@ -949,9 +1238,6 @@ function ProjectModal({ project, onClose }) {
 
         {/* =================================================
             MODAL CONTENT
-
-            COMPACT
-            NO SCROLL
         ================================================= */}
 
         <div className="px-4 py-3 sm:px-5 sm:py-3.5">
