@@ -19,7 +19,7 @@ const projects = [
       "Real-time collaborative workspace for developers with coding, communication, meetings and AI-assisted development.",
 
     description:
-      "SyncSpace is a full-stack collaborative development workspace that brings real-time coding, communication, video meetings, whiteboarding, file sharing and AI-assisted development into one platform.",
+      "A full-stack collaborative workspace combining real-time coding, communication, video meetings, whiteboarding, file sharing and AI-assisted development.",
 
     technologies: [
       "React",
@@ -50,7 +50,7 @@ const projects = [
       "Video interview platform designed for mock interview practice and candidate preparation.",
 
     description:
-      "MockHire is a video interview platform project focused on creating an interactive mock interview experience for candidates through a modern web application.",
+      "A modern video interview platform focused on creating an interactive mock interview experience for candidates.",
 
     technologies: [
       "React",
@@ -78,7 +78,7 @@ const projects = [
       "Healthcare web application combining MERN, OCR and AI-based analysis.",
 
     description:
-      "Smart Health Analyzer is a healthcare-focused web application combining full-stack development with OCR and AI capabilities for processing health-related information.",
+      "A healthcare-focused web application combining full-stack development with OCR and AI capabilities.",
 
     technologies: [
       "MongoDB",
@@ -90,7 +90,8 @@ const projects = [
       "Tailwind CSS",
     ],
 
-    github: "https://github.com/altafshaikh7/healthcare_project",
+    github:
+      "https://github.com/altafshaikh7/healthcare_project",
 
     live: "https://healthcare-sgihunters.netlify.app/",
   },
@@ -116,7 +117,8 @@ const projects = [
       "CSS",
     ],
 
-    github: "https://github.com/altafshaikh7/Chat-Gpt_Clone",
+    github:
+      "https://github.com/altafshaikh7/Chat-Gpt_Clone",
 
     live: null,
   },
@@ -133,10 +135,10 @@ const projects = [
     image: "/project/satquery.png",
 
     shortDescription:
-      "Agentic AI framework for remote-sensing workflows using intelligent retrieval, reasoning and extensible specialist tools.",
+      "Agentic AI framework for remote-sensing workflows using intelligent retrieval and reasoning.",
 
     description:
-      "SatQuery AI is a research-oriented agentic framework for remote sensing that connects natural-language queries with retrieval, reasoning and extensible specialist workflows. The project focuses on agentic orchestration, retrieval infrastructure, knowledge and solution spaces and modular tool integration.",
+      "A research-oriented agentic framework for remote sensing connecting natural-language queries with retrieval, reasoning and extensible specialist workflows.",
 
     technologies: [
       "Python",
@@ -151,7 +153,8 @@ const projects = [
       "pytest",
     ],
 
-    github: "https://github.com/altafshaikh7/satquery",
+    github:
+      "https://github.com/altafshaikh7/satquery",
 
     live: null,
   },
@@ -166,14 +169,13 @@ const projects = [
     category: "Frontend",
     language: "JavaScript / TypeScript",
 
-    // No image currently available
     image: null,
 
     shortDescription:
-      "Interactive 3D substation visualization built with React and Three.js technologies.",
+      "Interactive 3D substation visualization built with React and Three.js.",
 
     description:
-      "A 3D digital-twin interface focused on interactive visualization of an EHV substation environment using React and Three.js based technologies.",
+      "A 3D digital-twin interface focused on interactive visualization of an EHV substation environment.",
 
     technologies: [
       "React",
@@ -184,7 +186,8 @@ const projects = [
       "Recharts",
     ],
 
-    github: "https://github.com/altafshaikh7/3D_SIH",
+    github:
+      "https://github.com/altafshaikh7/3D_SIH",
 
     live: null,
   },
@@ -195,14 +198,13 @@ const projects = [
     category: "Frontend",
     language: "JavaScript",
 
-    // No image currently available
     image: null,
 
     shortDescription:
-      "Campus-focused web application designed around a modern student and academic community experience.",
+      "Campus-focused web application designed around a modern student experience.",
 
     description:
-      "Campus Connect is a campus-oriented web project designed around a modern student experience and academic community interface.",
+      "A campus-oriented web project designed around a modern student experience and academic community interface.",
 
     technologies: [
       "React",
@@ -212,7 +214,8 @@ const projects = [
       "Tailwind CSS",
     ],
 
-    github: "https://github.com/altafshaikh7/Campus-Connect-",
+    github:
+      "https://github.com/altafshaikh7/Campus-Connect-",
 
     live: null,
   },
@@ -222,13 +225,14 @@ const projects = [
     title: "Construction Website",
     category: "Frontend",
     language: "JavaScript",
+
     image: "/project/construction.png",
 
     shortDescription:
       "Responsive construction website developed using HTML, CSS and JavaScript.",
 
     description:
-      "A responsive construction-focused website created using HTML5, CSS3 and JavaScript with a clean and structured frontend experience.",
+      "A responsive construction-focused website created using HTML5, CSS3 and JavaScript.",
 
     technologies: [
       "HTML5",
@@ -243,38 +247,31 @@ const projects = [
   },
 ];
 
-// =====================================================
-// PROJECT SECTION
-// =====================================================
+// =========================================================
+// PROJECTS SECTION
+// =========================================================
 
 function Projects() {
   const [category, setCategory] = useState("Full Stack");
-
-  // 0 = project 1 + 2
-  // 1 = project 3 + 4
   const [page, setPage] = useState(0);
-
   const [selectedProject, setSelectedProject] = useState(null);
-
   const [direction, setDirection] = useState(1);
 
-  // ===================================================
-  // FILTER PROJECTS
-  // ===================================================
+  // =====================================================
+  // FILTER
+  // =====================================================
 
   const filteredProjects = projects.filter(
     (project) => project.category === category
   );
 
-  // ===================================================
-  // TOTAL PAGES
-  // ===================================================
+  // =====================================================
+  // PAGINATION
+  // =====================================================
 
-  const totalPages = Math.ceil(filteredProjects.length / 2);
-
-  // ===================================================
-  // CURRENT TWO PROJECTS
-  // ===================================================
+  const totalPages = Math.ceil(
+    filteredProjects.length / 2
+  );
 
   const startIndex = page * 2;
 
@@ -283,9 +280,9 @@ function Projects() {
     startIndex + 2
   );
 
-  // ===================================================
+  // =====================================================
   // CATEGORY CHANGE
-  // ===================================================
+  // =====================================================
 
   const changeCategory = (newCategory) => {
     setCategory(newCategory);
@@ -293,9 +290,9 @@ function Projects() {
     setDirection(1);
   };
 
-  // ===================================================
+  // =====================================================
   // NEXT
-  // ===================================================
+  // =====================================================
 
   const nextProjects = () => {
     if (page >= totalPages - 1) {
@@ -303,13 +300,12 @@ function Projects() {
     }
 
     setDirection(1);
-
     setPage((currentPage) => currentPage + 1);
   };
 
-  // ===================================================
+  // =====================================================
   // PREVIOUS
-  // ===================================================
+  // =====================================================
 
   const previousProjects = () => {
     if (page <= 0) {
@@ -317,13 +313,12 @@ function Projects() {
     }
 
     setDirection(-1);
-
     setPage((currentPage) => currentPage - 1);
   };
 
-  // ===================================================
-  // ESC CLOSE MODAL
-  // ===================================================
+  // =====================================================
+  // ESCAPE TO CLOSE
+  // =====================================================
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -332,7 +327,10 @@ function Projects() {
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
 
     return () => {
       window.removeEventListener(
@@ -342,14 +340,16 @@ function Projects() {
     };
   }, []);
 
-  // ===================================================
-  // DISABLE BODY SCROLL
-  // ===================================================
+  // =====================================================
+  // LOCK BACKGROUND SCROLL
+  // =====================================================
 
   useEffect(() => {
-    document.body.style.overflow = selectedProject
-      ? "hidden"
-      : "";
+    if (selectedProject) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
 
     return () => {
       document.body.style.overflow = "";
@@ -358,31 +358,30 @@ function Projects() {
 
   return (
     <>
-      {/* =====================================================
+      {/* =================================================
           PROJECT SECTION
-      ===================================================== */}
+      ================================================= */}
 
       <section
         id="projects"
-        className="w-full overflow-hidden bg-[#F0E4B8] px-6 py-24 sm:px-8 lg:px-10 lg:py-32"
+        className="w-full overflow-hidden bg-[#F0E4B8] px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-28"
       >
-        <div className="mx-auto max-w-7xl">
+        <div className="mx-auto w-full max-w-6xl">
 
           {/* =================================================
               HEADER
           ================================================= */}
 
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <div className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
 
             <div>
-              <p className="mb-4 text-sm font-semibold uppercase tracking-[0.25em] text-[#596A99]">
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.25em] text-[#596A99] sm:text-xs">
                 Selected Work
               </p>
 
-              <h2 className="text-4xl font-black tracking-[-0.04em] text-[#3A4A78] sm:text-5xl lg:text-6xl">
+              <h2 className="text-4xl font-black leading-[0.95] tracking-[-0.04em] text-[#3A4A78] sm:text-5xl lg:text-6xl">
                 Projects I've
                 <br />
-
                 <span className="text-[#596A99]">
                   built.
                 </span>
@@ -393,7 +392,7 @@ function Projects() {
                 CATEGORY BUTTONS
             ================================================= */}
 
-            <div className="flex w-fit flex-wrap items-center rounded-full border border-[#D9CC9C] bg-white/25 p-1.5 backdrop-blur-sm">
+            <div className="flex w-fit max-w-full flex-wrap gap-1 rounded-full border border-[#D9CC9C] bg-white/30 p-1.5 backdrop-blur-sm">
 
               {categories.map((item) => (
                 <button
@@ -402,7 +401,7 @@ function Projects() {
                   onClick={() =>
                     changeCategory(item)
                   }
-                  className={`rounded-full px-5 py-2.5 text-sm font-bold transition-all duration-300 ${
+                  className={`rounded-full px-3 py-2 text-[11px] font-bold transition-all duration-300 sm:px-4 sm:py-2.5 sm:text-xs ${
                     category === item
                       ? "bg-[#3A4A78] text-white shadow-md"
                       : "text-[#596A99] hover:text-[#3A4A78]"
@@ -416,60 +415,52 @@ function Projects() {
           </div>
 
           {/* =================================================
-              PROJECT CARDS
+              PROJECT GRID
           ================================================= */}
 
-          <div className="relative mt-16">
+          <div className="mx-auto mt-10 w-full max-w-5xl sm:mt-12">
 
             <div
               key={`${category}-${page}`}
-              className={`grid gap-8 md:grid-cols-2 ${
+              className={`grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2 ${
                 direction === 1
                   ? "animate-project-next"
                   : "animate-project-prev"
               }`}
             >
-
-              {visibleProjects.map(
-                (project) => (
-                  <ProjectCard
-                    key={project.id}
-                    project={project}
-                    onOpen={() =>
-                      setSelectedProject(
-                        project
-                      )
-                    }
-                  />
-                )
-              )}
-
+              {visibleProjects.map((project) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  onOpen={() =>
+                    setSelectedProject(project)
+                  }
+                />
+              ))}
             </div>
 
             {/* =================================================
-                ARROW BUTTONS
+                ARROWS
             ================================================= */}
 
             {totalPages > 1 && (
-              <div className="mt-10 flex items-center justify-end gap-3">
-
-                {/* PREVIOUS */}
+              <div className="mt-7 flex justify-end gap-2">
 
                 <button
                   type="button"
                   onClick={previousProjects}
                   disabled={page === 0}
                   aria-label="Previous projects"
-                  className={`group flex h-12 w-12 items-center justify-center rounded-full border border-[#3A4A78]/30 text-[#3A4A78] transition-all duration-300 ${
+                  className={`flex h-10 w-10 items-center justify-center rounded-full border border-[#3A4A78]/30 text-[#3A4A78] transition-all sm:h-11 sm:w-11 ${
                     page === 0
                       ? "cursor-not-allowed opacity-30"
-                      : "hover:-translate-x-1 hover:bg-[#3A4A78] hover:text-white"
+                      : "hover:bg-[#3A4A78] hover:text-white"
                   }`}
                 >
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
-                    className="h-5 w-5"
+                    className="h-4 w-4"
                   >
                     <path
                       d="M15 18L9 12L15 6"
@@ -481,8 +472,6 @@ function Projects() {
                   </svg>
                 </button>
 
-                {/* NEXT */}
-
                 <button
                   type="button"
                   onClick={nextProjects}
@@ -490,16 +479,16 @@ function Projects() {
                     page === totalPages - 1
                   }
                   aria-label="Next projects"
-                  className={`group flex h-14 w-14 items-center justify-center rounded-full bg-[#3A4A78] text-white shadow-lg transition-all duration-300 ${
+                  className={`flex h-10 w-10 items-center justify-center rounded-full bg-[#3A4A78] text-white shadow-md transition-all sm:h-11 sm:w-11 ${
                     page === totalPages - 1
                       ? "cursor-not-allowed opacity-30"
-                      : "hover:translate-x-1 hover:bg-[#2F3D68]"
+                      : "hover:bg-[#2F3D68]"
                   }`}
                 >
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
-                    className="h-6 w-6"
+                    className="h-4 w-4"
                   >
                     <path
                       d="M9 18L15 12L9 6"
@@ -517,22 +506,22 @@ function Projects() {
           </div>
 
           {/* =================================================
-              PAGE INDICATOR
+              PAGE INFO
           ================================================= */}
 
-          <div className="mt-8 flex items-center justify-between border-t border-[#D9CC9C] pt-5">
+          <div className="mx-auto mt-6 flex max-w-5xl items-center justify-between border-t border-[#D9CC9C] pt-4">
 
-            <p className="text-sm font-medium text-[#596A99]">
+            <p className="text-[10px] font-medium text-[#596A99] sm:text-xs">
               {category} Projects
             </p>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
 
-              <p className="text-sm font-bold text-[#3A4A78]">
-                Page {page + 1} / {totalPages}
+              <p className="text-[10px] font-bold text-[#3A4A78] sm:text-xs">
+                {page + 1} / {totalPages}
               </p>
 
-              <div className="flex gap-1.5">
+              <div className="flex gap-1">
 
                 {Array.from({
                   length: totalPages,
@@ -544,18 +533,16 @@ function Projects() {
                       setPage(index);
 
                       setDirection(
-                        index > page
-                          ? 1
-                          : -1
+                        index > page ? 1 : -1
                       );
                     }}
-                    aria-label={`Go to page ${
+                    aria-label={`Page ${
                       index + 1
                     }`}
-                    className={`h-2 rounded-full transition-all duration-300 ${
+                    className={`h-1.5 rounded-full transition-all ${
                       page === index
-                        ? "w-7 bg-[#3A4A78]"
-                        : "w-2 bg-[#3A4A78]/20"
+                        ? "w-6 bg-[#3A4A78]"
+                        : "w-1.5 bg-[#3A4A78]/20"
                     }`}
                   />
                 ))}
@@ -563,8 +550,8 @@ function Projects() {
               </div>
 
             </div>
-          </div>
 
+          </div>
         </div>
       </section>
 
@@ -587,24 +574,24 @@ function Projects() {
 
       <style>{`
         @keyframes projectNext {
-          0% {
+          from {
             opacity: 0;
-            transform: translateX(45px);
+            transform: translateX(35px);
           }
 
-          100% {
+          to {
             opacity: 1;
             transform: translateX(0);
           }
         }
 
         @keyframes projectPrev {
-          0% {
+          from {
             opacity: 0;
-            transform: translateX(-45px);
+            transform: translateX(-35px);
           }
 
-          100% {
+          to {
             opacity: 1;
             transform: translateX(0);
           }
@@ -613,25 +600,15 @@ function Projects() {
         .animate-project-next {
           animation:
             projectNext
-            0.55s
-            cubic-bezier(
-              0.22,
-              1,
-              0.36,
-              1
-            );
+            0.45s
+            cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .animate-project-prev {
           animation:
             projectPrev
-            0.55s
-            cubic-bezier(
-              0.22,
-              1,
-              0.36,
-              1
-            );
+            0.45s
+            cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -649,27 +626,42 @@ function Projects() {
 // PROJECT CARD
 // =========================================================
 
-function ProjectCard({
-  project,
-  onOpen,
-}) {
+function ProjectCard({ project, onOpen }) {
   return (
     <article
       onClick={onOpen}
-      className="group cursor-pointer overflow-hidden rounded-[28px] border border-[#D9CC9C]/80 bg-white/20 p-3 shadow-[0_20px_60px_rgba(58,74,120,0.08)] backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_30px_80px_rgba(58,74,120,0.16)]"
+      className="group min-w-0 cursor-pointer overflow-hidden rounded-[22px] border border-[#D9CC9C]/80 bg-white/20 p-2 shadow-[0_15px_45px_rgba(58,74,120,0.07)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_22px_55px_rgba(58,74,120,0.13)] sm:rounded-[24px] sm:p-2.5"
     >
 
       {/* =================================================
-          IMAGE / FALLBACK
+          CATEGORY
+          IMAGE KE UPAR NAHI AAYEGA
       ================================================= */}
 
-      <div className="relative aspect-[16/9] overflow-hidden rounded-[22px] bg-[#D9CC9C]">
+      <div className="mb-2.5 px-1 sm:mb-3 sm:px-1.5">
+
+        <span className="inline-flex rounded-full border border-white/80 bg-[#F0E4B8] px-3 py-1.5 text-[10px] font-bold text-[#3A4A78] shadow-sm sm:px-3.5 sm:text-[11px]">
+          {project.category}
+        </span>
+
+      </div>
+
+      {/* =================================================
+          IMAGE
+
+          ORIGINAL RATIO
+          NO CROP
+          NO FIXED HEIGHT
+          NO aspect-ratio
+      ================================================= */}
+
+      <div className="w-full overflow-hidden rounded-[17px] bg-[#D9CC9C] sm:rounded-[19px]">
 
         {project.image ? (
           <img
             src={project.image}
             alt={project.title}
-            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            className="block h-auto w-full object-contain"
             onError={(event) => {
               event.currentTarget.style.display =
                 "none";
@@ -689,123 +681,78 @@ function ProjectCard({
         ) : null}
 
         {/* =================================================
-            PREMIUM FALLBACK
+            MISSING IMAGE FALLBACK
         ================================================= */}
 
         <div
-          className={`image-fallback absolute inset-0 flex flex-col items-center justify-center overflow-hidden ${
-            project.image
-              ? "hidden"
-              : ""
+          className={`image-fallback relative flex min-h-[180px] w-full items-center justify-center overflow-hidden ${
+            project.image ? "hidden" : ""
           }`}
         >
 
-          {/* Background */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#3A4A78] via-[#596A99] to-[#26365F]" />
 
-          {/* Decorative circles */}
-          <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full border border-white/10" />
+          <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full border border-white/10" />
 
-          <div className="absolute -bottom-20 -left-16 h-56 w-56 rounded-full border border-white/10" />
+          <div className="absolute -bottom-16 -left-12 h-44 w-44 rounded-full border border-white/10" />
 
-          <div className="absolute right-10 bottom-10 h-20 w-20 rounded-full bg-white/5 blur-xl" />
+          <div className="relative z-10 flex h-14 w-14 items-center justify-center rounded-[17px] border border-white/20 bg-white/10 backdrop-blur-md">
 
-          {/* Icon */}
-          <div className="relative z-10 mb-5 flex h-20 w-20 items-center justify-center rounded-[24px] border border-white/20 bg-white/10 shadow-2xl backdrop-blur-md">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              className="h-7 w-7 text-white"
+            >
+              <path
+                d="M4 5.5C4 4.67 4.67 4 5.5 4h13C19.33 4 20 4.67 20 5.5v13c0 .83-.67 1.5-1.5 1.5h-13C4.67 20 4 19.33 4 18.5v-13Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              />
 
-            {project.category ===
-            "Frontend" ? (
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                className="h-10 w-10 text-white"
-              >
-                <path
-                  d="M4 5.5C4 4.67 4.67 4 5.5 4h13C19.33 4 20 4.67 20 5.5v13c0 .83-.67 1.5-1.5 1.5h-13C4.67 20 4 19.33 4 18.5v-13Z"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                />
-                <path
-                  d="M7 8h10M7 12h5M7 16h7"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-              </svg>
-            ) : (
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                className="h-10 w-10 text-white"
-              >
-                <path
-                  d="M12 3v18M3 12h18"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="7"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                />
-              </svg>
-            )}
+              <path
+                d="M7 8h10M7 12h5M7 16h7"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
 
           </div>
 
-          {/* Project title */}
-          <p className="relative z-10 text-xl font-black tracking-tight text-white">
+          <p className="absolute bottom-5 left-0 right-0 z-10 px-4 text-center text-base font-black text-white">
             {project.title}
           </p>
 
-          {/* Category */}
-          <p className="relative z-10 mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/60">
-            {project.category}
-          </p>
-
-        </div>
-
-        {/* Gradient overlay */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#26365F]/50 via-transparent to-transparent opacity-60" />
-
-        {/* CATEGORY */}
-        <div className="absolute left-4 top-4 rounded-full border border-white/30 bg-[#F0E4B8]/90 px-3 py-1.5 text-xs font-bold text-[#3A4A78] backdrop-blur-md">
-          {project.category}
         </div>
 
       </div>
 
       {/* =================================================
-          CONTENT
+          CARD CONTENT
       ================================================= */}
 
-      <div className="px-3 pb-4 pt-5">
+      <div className="px-1.5 pb-2.5 pt-3 sm:px-2 sm:pb-3 sm:pt-3.5">
 
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start justify-between gap-2">
 
-          <div>
+          <div className="min-w-0">
 
-            <h3 className="text-2xl font-black tracking-tight text-[#3A4A78] transition-colors duration-300 group-hover:text-[#596A99]">
+            <h3 className="break-words text-lg font-black tracking-tight text-[#3A4A78] sm:text-xl">
               {project.title}
             </h3>
 
-            <p className="mt-1 text-xs font-bold uppercase tracking-[0.16em] text-[#596A99]">
+            <p className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-[#596A99] sm:text-[10px]">
               {project.language}
             </p>
 
           </div>
 
-          {/* OPEN */}
-
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#3A4A78]/20 text-[#3A4A78] transition-all duration-300 group-hover:translate-x-1 group-hover:bg-[#3A4A78] group-hover:text-white">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#3A4A78]/20 text-[#3A4A78] transition-all duration-300 group-hover:bg-[#3A4A78] group-hover:text-white sm:h-9 sm:w-9">
 
             <svg
               viewBox="0 0 24 24"
               fill="none"
-              className="h-5 w-5"
+              className="h-4 w-4"
             >
               <path
                 d="M7 17L17 7M9 7H17V15"
@@ -822,90 +769,68 @@ function ProjectCard({
 
         {/* DESCRIPTION */}
 
-        <p className="mt-4 line-clamp-2 text-sm leading-6 text-[#596A99]">
+        <p className="mt-2 line-clamp-2 text-[11px] leading-[1.5] text-[#596A99] sm:text-xs">
           {project.shortDescription}
         </p>
 
         {/* TECHNOLOGIES */}
 
-        <div className="mt-5 flex flex-wrap gap-2">
+        <div className="mt-3 flex flex-wrap gap-1">
 
           {project.technologies
-            .slice(0, 5)
+            .slice(0, 4)
             .map((technology) => (
               <span
                 key={technology}
-                className="rounded-full border border-[#D9CC9C] bg-[#F0E4B8]/60 px-2.5 py-1 text-[11px] font-semibold text-[#3A4A78]"
+                className="max-w-full break-words rounded-full border border-[#D9CC9C] bg-[#F0E4B8]/60 px-2 py-1 text-[8px] font-semibold text-[#3A4A78] sm:text-[9px]"
               >
                 {technology}
               </span>
             ))}
 
-          {project.technologies.length >
-            5 && (
-            <span className="rounded-full border border-[#D9CC9C] bg-[#F0E4B8]/60 px-2.5 py-1 text-[11px] font-semibold text-[#596A99]">
-              +
-              {project.technologies.length -
-                5}
+          {project.technologies.length > 4 && (
+            <span className="rounded-full border border-[#D9CC9C] bg-[#F0E4B8]/60 px-2 py-1 text-[8px] font-semibold text-[#596A99]">
+              +{project.technologies.length - 4}
             </span>
           )}
 
         </div>
 
-        {/* LINKS */}
+        {/* =================================================
+            LINKS
+        ================================================= */}
 
         <div
-          className="mt-6 flex gap-3"
+          className="mt-3 flex flex-wrap gap-2"
           onClick={(event) =>
             event.stopPropagation()
           }
         >
 
-          {/* GITHUB */}
-
           <a
             href={project.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-[#3A4A78] px-5 py-2.5 text-xs font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#2F3D68]"
+            className="inline-flex items-center gap-1.5 rounded-full bg-[#3A4A78] px-3.5 py-1.5 text-[9px] font-bold text-white transition-all hover:bg-[#2F3D68] sm:px-4 sm:py-2 sm:text-[10px]"
           >
-            <SiGithub className="h-4 w-4" />
-
+            <SiGithub className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
             GitHub
           </a>
-
-          {/* LIVE */}
 
           {project.live && (
             <a
               href={project.live}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-[#3A4A78] px-5 py-2.5 text-xs font-bold text-[#3A4A78] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#3A4A78] hover:text-white"
+              className="inline-flex items-center gap-1.5 rounded-full border border-[#3A4A78] px-3.5 py-1.5 text-[9px] font-bold text-[#3A4A78] transition-all hover:bg-[#3A4A78] hover:text-white sm:px-4 sm:py-2 sm:text-[10px]"
             >
               Live Demo
-
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                className="h-4 w-4"
-              >
-                <path
-                  d="M7 17L17 7M9 7H17V15"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-
             </a>
           )}
 
         </div>
 
       </div>
-
     </article>
   );
 }
@@ -914,217 +839,226 @@ function ProjectCard({
 // PROJECT MODAL
 // =========================================================
 
-function ProjectModal({
-  project,
-  onClose,
-}) {
+function ProjectModal({ project, onClose }) {
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#26365F]/60 p-4 backdrop-blur-md"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#26365F]/75 p-2 backdrop-blur-md sm:p-4"
       onClick={onClose}
     >
 
+      {/* =================================================
+          MODAL
+
+          NO INTERNAL SCROLL
+      ================================================= */}
+
       <div
-        className="relative max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-[30px] border border-white/40 bg-[#F0E4B8] p-4 shadow-2xl sm:p-6"
+        className="relative w-full max-w-[620px] overflow-hidden rounded-[20px] bg-[#F0E4B8] shadow-2xl sm:rounded-[24px]"
         onClick={(event) =>
           event.stopPropagation()
         }
       >
 
-        {/* CLOSE */}
+        {/* =================================================
+            CLOSE BUTTON
+        ================================================= */}
 
         <button
           type="button"
           onClick={onClose}
-          aria-label="Close project details"
-          className="absolute right-6 top-6 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-[#3A4A78] text-xl text-white shadow-lg transition-all duration-300 hover:rotate-90 hover:bg-[#2F3D68]"
+          aria-label="Close project"
+          className="absolute right-2.5 top-2.5 z-30 flex h-8 w-8 items-center justify-center rounded-full bg-[#3A4A78] text-base font-bold text-white shadow-lg transition-all hover:rotate-90 hover:bg-[#2F3D68] sm:right-3.5 sm:top-3.5 sm:h-9 sm:w-9 sm:text-lg"
         >
           ×
         </button>
 
-        <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr]">
+        {/* =================================================
+            MODAL IMAGE
 
-          {/* IMAGE / FALLBACK */}
+            IMPORTANT:
 
-          <div className="relative min-h-[280px] overflow-hidden rounded-[24px] bg-[#D9CC9C]">
+            w-auto
+            h-auto
+            max-w-full
+            max-h
 
-            {project.image ? (
-              <img
-                src={project.image}
-                alt={project.title}
-                className="h-full min-h-[280px] w-full object-cover"
-                onError={(event) => {
-                  event.currentTarget.style.display =
-                    "none";
+            IMAGE WILL NEVER BE CROPPED.
+        ================================================= */}
 
-                  const fallback =
-                    event.currentTarget.parentElement?.querySelector(
-                      ".modal-image-fallback"
-                    );
+        <div className="flex w-full items-center justify-center overflow-hidden bg-[#D9CC9C]">
 
-                  if (fallback) {
-                    fallback.classList.remove(
-                      "hidden"
-                    );
-                  }
-                }}
-              />
-            ) : null}
+          {project.image ? (
+            <img
+              src={project.image}
+              alt={project.title}
+              className="
+                block
+                h-auto
+                w-auto
+                max-h-[38vh]
+                max-w-full
+                object-contain
+                sm:max-h-[44vh]
+              "
+            />
+          ) : (
+            /* =================================================
+               FALLBACK
+            ================================================= */
 
-            {/* MODAL FALLBACK */}
+            <div className="relative flex h-[170px] w-full items-center justify-center overflow-hidden bg-gradient-to-br from-[#3A4A78] via-[#596A99] to-[#26365F] sm:h-[210px]">
 
-            <div
-              className={`modal-image-fallback absolute inset-0 flex flex-col items-center justify-center overflow-hidden ${
-                project.image
-                  ? "hidden"
-                  : ""
-              }`}
-            >
+              <div className="absolute -right-16 -top-16 h-52 w-52 rounded-full border border-white/10" />
 
-              <div className="absolute inset-0 bg-gradient-to-br from-[#3A4A78] via-[#596A99] to-[#26365F]" />
+              <div className="absolute -bottom-20 -left-16 h-60 w-60 rounded-full border border-white/10" />
 
-              <div className="absolute -right-20 -top-20 h-60 w-60 rounded-full border border-white/10" />
+              <div className="relative z-10 text-center">
 
-              <div className="absolute -bottom-24 -left-20 h-72 w-72 rounded-full border border-white/10" />
-
-              <div className="relative z-10 flex h-24 w-24 items-center justify-center rounded-[28px] border border-white/20 bg-white/10 backdrop-blur-md">
-
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  className="h-12 w-12 text-white"
-                >
-                  <path
-                    d="M4 5.5C4 4.67 4.67 4 5.5 4h13C19.33 4 20 4.67 20 5.5v13c0 .83-.67 1.5-1.5 1.5h-13C4.67 20 4 19.33 4 18.5v-13Z"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                  />
-
-                  <path
-                    d="M7 8h10M7 12h5M7 16h7"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-
-              </div>
-
-              <p className="relative z-10 mt-6 text-2xl font-black text-white">
-                {project.title}
-              </p>
-
-              <p className="relative z-10 mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/60">
-                {project.category}
-              </p>
-
-            </div>
-
-          </div>
-
-          {/* DETAILS */}
-
-          <div className="flex flex-col justify-center px-2 py-4">
-
-            {/* CATEGORY */}
-
-            <span className="w-fit rounded-full bg-[#3A4A78] px-4 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-white">
-              {project.category}
-            </span>
-
-            {/* TITLE */}
-
-            <h2 className="mt-5 text-4xl font-black tracking-[-0.03em] text-[#3A4A78]">
-              {project.title}
-            </h2>
-
-            {/* LANGUAGE */}
-
-            <p className="mt-2 text-sm font-bold uppercase tracking-[0.15em] text-[#596A99]">
-              Built with{" "}
-              {project.language}
-            </p>
-
-            {/* DESCRIPTION */}
-
-            <p className="mt-6 text-base leading-7 text-[#596A99]">
-              {project.description}
-            </p>
-
-            {/* TECHNOLOGIES */}
-
-            <div className="mt-7">
-
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[#3A4A78]">
-                Technologies
-              </p>
-
-              <div className="flex flex-wrap gap-2">
-
-                {project.technologies.map(
-                  (technology) => (
-                    <span
-                      key={technology}
-                      className="rounded-full border border-[#D9CC9C] bg-white/40 px-3 py-1.5 text-xs font-semibold text-[#3A4A78]"
-                    >
-                      {technology}
-                    </span>
-                  )
-                )}
-
-              </div>
-
-            </div>
-
-            {/* LINKS */}
-
-            <div className="mt-8 flex flex-wrap gap-3">
-
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-[#3A4A78] px-6 py-3 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-[#2F3D68]"
-              >
-                <SiGithub className="h-5 w-5" />
-
-                View GitHub
-              </a>
-
-              {project.live && (
-                <a
-                  href={project.live}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-[#3A4A78] px-6 py-3 text-sm font-bold text-[#3A4A78] transition-all duration-300 hover:-translate-y-1 hover:bg-[#3A4A78] hover:text-white"
-                >
-                  Live Demo
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-[18px] border border-white/20 bg-white/10 backdrop-blur-md">
 
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
-                    className="h-5 w-5"
+                    className="h-7 w-7 text-white"
                   >
                     <path
-                      d="M7 17L17 7M9 7H17V15"
+                      d="M4 5.5C4 4.67 4.67 4 5.5 4h13C19.33 4 20 4.67 20 5.5v13c0 .83-.67 1.5-1.5 1.5h-13C4.67 20 4 19.33 4 18.5v-13Z"
                       stroke="currentColor"
-                      strokeWidth="2"
+                      strokeWidth="1.5"
+                    />
+
+                    <path
+                      d="M7 8h10M7 12h5M7 16h7"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
                       strokeLinecap="round"
-                      strokeLinejoin="round"
                     />
                   </svg>
 
-                </a>
+                </div>
+
+                <p className="mt-3 text-lg font-black text-white">
+                  {project.title}
+                </p>
+
+              </div>
+            </div>
+          )}
+
+        </div>
+
+        {/* =================================================
+            MODAL CONTENT
+
+            COMPACT
+            NO SCROLL
+        ================================================= */}
+
+        <div className="px-4 py-3 sm:px-5 sm:py-3.5">
+
+          {/* CATEGORY */}
+
+          <span className="inline-flex rounded-full bg-[#3A4A78] px-2.5 py-1 text-[8px] font-bold uppercase tracking-[0.12em] text-white sm:px-3 sm:text-[9px]">
+            {project.category}
+          </span>
+
+          {/* TITLE */}
+
+          <h2 className="mt-1.5 break-words text-lg font-black leading-tight tracking-tight text-[#3A4A78] sm:text-2xl">
+            {project.title}
+          </h2>
+
+          {/* LANGUAGE */}
+
+          <p className="mt-1 text-[8px] font-bold uppercase tracking-[0.14em] text-[#596A99] sm:text-[9px]">
+            {project.language}
+          </p>
+
+          <div className="mt-2 h-px w-8 bg-[#596A99]/40" />
+
+          {/* DESCRIPTION */}
+
+          <p className="mt-2 max-w-xl text-[10px] leading-[1.4] text-[#596A99] sm:text-[11px] sm:leading-[1.5]">
+            {project.description}
+          </p>
+
+          {/* =================================================
+              TECHNOLOGIES
+          ================================================= */}
+
+          <div className="mt-2.5">
+
+            <p className="mb-1.5 text-[7px] font-bold uppercase tracking-[0.17em] text-[#3A4A78] sm:text-[8px]">
+              Technologies
+            </p>
+
+            <div className="flex flex-wrap gap-1">
+
+              {project.technologies
+                .slice(0, 6)
+                .map((technology) => (
+                  <span
+                    key={technology}
+                    className="max-w-full break-words rounded-full border border-[#D9CC9C] bg-white/40 px-2 py-0.5 text-[8px] font-semibold text-[#3A4A78] sm:px-2.5 sm:py-1 sm:text-[9px]"
+                  >
+                    {technology}
+                  </span>
+                ))}
+
+              {project.technologies.length > 6 && (
+                <span className="rounded-full border border-[#D9CC9C] bg-white/40 px-2 py-0.5 text-[8px] font-semibold text-[#596A99]">
+                  +{project.technologies.length - 6}
+                </span>
               )}
 
             </div>
+          </div>
+
+          {/* =================================================
+              BUTTONS
+          ================================================= */}
+
+          <div className="mt-3 flex flex-wrap gap-2">
+
+            {/* GITHUB */}
+
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full bg-[#3A4A78] px-3.5 py-1.5 text-[9px] font-bold text-white transition-all hover:bg-[#2F3D68] sm:px-4 sm:py-2 sm:text-[10px]"
+            >
+              <SiGithub className="h-3 w-3" />
+              GitHub
+            </a>
+
+            {/* LIVE */}
+
+            {project.live && (
+              <a
+                href={project.live}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-full border border-[#3A4A78] px-3.5 py-1.5 text-[9px] font-bold text-[#3A4A78] transition-all hover:bg-[#3A4A78] hover:text-white sm:px-4 sm:py-2 sm:text-[10px]"
+              >
+                Live Demo
+              </a>
+            )}
+
+            {/* CLOSE */}
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-full border border-[#3A4A78]/30 px-3.5 py-1.5 text-[9px] font-bold text-[#3A4A78] transition-all hover:bg-[#3A4A78] hover:text-white sm:px-4 sm:py-2 sm:text-[10px]"
+            >
+              Close
+            </button>
 
           </div>
 
         </div>
-
       </div>
-
     </div>
   );
 }

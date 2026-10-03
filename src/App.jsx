@@ -3,6 +3,7 @@ import Hero from "./components/Hero";
 import About from "./components/About";
 import Skills from "./components/Skills";
 import Projects from "./components/Projects";
+import Hackathons from "./components/Hackathons";
 
 function App() {
   return (
@@ -11,17 +12,10 @@ function App() {
 
       <main className="w-full">
         <Hero />
-
         <About />
-
         <Skills />
-
         <Projects />
-
-        <section
-          id="hackathons"
-          className="min-h-screen w-full bg-[#F0E4B8]"
-        />
+        <Hackathons />
 
         <section
           id="certificates"
