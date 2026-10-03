@@ -4,6 +4,9 @@ import About from "./components/About";
 import Skills from "./components/Skills";
 import Projects from "./components/Projects";
 import Hackathons from "./components/Hackathons";
+import Certificates from "./components/Certificates";
+import Contact from "./components/Contact";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -16,17 +19,11 @@ function App() {
         <Skills />
         <Projects />
         <Hackathons />
-
-        <section
-          id="certificates"
-          className="min-h-screen w-full bg-[#F0E4B8]"
-        />
-
-        <section
-          id="contact"
-          className="min-h-screen w-full bg-[#F0E4B8]"
-        />
+        <Certificates />
+        <Contact />
       </main>
+
+      <Footer />
     </div>
   );
 }
