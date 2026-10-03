@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const hackathons = [
@@ -96,9 +96,36 @@ function Hackathons() {
   const [selectedHackathon, setSelectedHackathon] =
     useState(null);
 
-  // NEW:
   // Stores the selected image's aspect ratio.
   const [imageRatio, setImageRatio] = useState(null);
+
+  /* =====================================================
+     SCROLL ENTRANCE TRIGGER
+  ===================================================== */
+
+  const sectionRef = useRef(null);
+  const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setRevealed(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    observer.observe(el);
+
+    return () => observer.disconnect();
+  }, []);
 
   const itemsPerPage = 3;
 
@@ -189,46 +216,41 @@ function Hackathons() {
 
       <section
         id="hackathons"
-        className="w-full overflow-hidden bg-[#F0E4B8] px-4 py-20 sm:px-6 sm:py-24 lg:px-10 lg:py-32"
+        ref={sectionRef}
+        className={`hackathons-section w-full overflow-hidden bg-[#F0E4B8] px-4 py-20 sm:px-6 sm:py-24 lg:px-10 lg:py-32 ${
+          revealed ? "is-revealed" : ""
+        }`}
       >
         <div className="mx-auto w-full max-w-7xl">
 
           {/* =================================================
-              HEADING
+              HEADING  (About.jsx style)
           ================================================= */}
 
-          <motion.div
-            initial={{
-              opacity: 0,
-              y: 35,
-            }}
-            whileInView={{
-              opacity: 1,
-              y: 0,
-            }}
-            viewport={{
-              once: true,
-              amount: 0.3,
-            }}
-            transition={{
-              duration: 0.8,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="mb-10 sm:mb-14"
-          >
-            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-[#596A99] sm:text-sm">
+          <div className="hackathons-header mb-10 sm:mb-14">
+
+            <p className="hackathons-label mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-[#596A99] sm:text-sm">
+              <span
+                className="hackathons-label-line"
+                aria-hidden="true"
+              />
               Hackathons
             </p>
 
-            <h2 className="max-w-3xl text-4xl font-black leading-[0.95] tracking-[-0.04em] text-[#3A4A78] sm:text-5xl lg:text-6xl">
-              Competing,
-              <br />
+            <h2 className="hackathons-title max-w-3xl text-4xl font-black leading-[0.95] tracking-[-0.04em] text-[#3A4A78] sm:text-5xl lg:text-6xl">
+              <span className="hackathons-title-mask">
+                <span className="hackathons-title-line">
+                  Competing,
+                </span>
+              </span>
 
-              <span className="text-[#596A99]">
-                building & learning.
+              <span className="hackathons-title-mask">
+                <span className="hackathons-title-line hackathons-title-accent">
+                  building &amp; learning.
+                </span>
               </span>
             </h2>
-          </motion.div>
+          </div>
 
           {/* =================================================
               CARDS
@@ -258,25 +280,14 @@ function Hackathons() {
               >
                 {visibleHackathons.map(
                   (hackathon, index) => (
-                    <motion.button
+                    <button
                       key={hackathon.id}
                       type="button"
                       onClick={() =>
                         openHackathon(hackathon)
                       }
-                      initial={{
-                        opacity: 0,
-                        y: 25,
-                      }}
-                      animate={{
-                        opacity: 1,
-                        y: 0,
-                      }}
-                      transition={{
-                        duration: 0.5,
-                        delay: index * 0.08,
-                      }}
-                      className="group flex h-full min-w-0 text-left"
+                      style={{ "--card-index": index }}
+                      className="hackathon-card group flex h-full min-w-0 text-left"
                     >
                       <div
                         className="
@@ -382,7 +393,7 @@ function Hackathons() {
                           </div>
                         </div>
                       </div>
-                    </motion.button>
+                    </button>
                   )
                 )}
               </motion.div>
@@ -393,7 +404,7 @@ function Hackathons() {
             ================================================= */}
 
             {totalPages > 1 && (
-              <div className="mt-8 flex items-center justify-center gap-4 sm:mt-10 sm:gap-5">
+              <div className="hackathons-pagination mt-8 flex items-center justify-center gap-4 sm:mt-10 sm:gap-5">
 
                 <button
                   type="button"
@@ -481,8 +492,6 @@ function Hackathons() {
 
             {/* =================================================
                 MODAL
-
-                Width is calculated from IMAGE RATIO.
             ================================================= */}
 
             <motion.div
@@ -577,8 +586,6 @@ function Hackathons() {
 
               {/* =================================================
                   IMAGE AREA
-
-                  The image itself controls the width.
               ================================================= */}
 
               <div
@@ -681,6 +688,216 @@ function Hackathons() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* =====================================================
+          SCROLL ENTRANCE ANIMATIONS
+      ===================================================== */}
+
+      <style>{`
+        /* ===============================================
+           HEADER — About.jsx style
+        =============================================== */
+
+        .hackathons-label {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+
+          opacity: 0;
+          translate: -18px 0;
+
+          transition:
+            opacity
+            0.8s
+            cubic-bezier(0.22, 1, 0.36, 1)
+            0.1s,
+
+            translate
+            0.8s
+            cubic-bezier(0.22, 1, 0.36, 1)
+            0.1s;
+        }
+
+        .is-revealed .hackathons-label {
+          opacity: 1;
+          translate: 0 0;
+        }
+
+        .hackathons-label-line {
+          display: inline-block;
+          width: 32px;
+          height: 1px;
+          background: rgba(89, 106, 153, 0.6);
+
+          transform-origin: left center;
+          scale: 0 1;
+
+          transition:
+            scale
+            0.8s
+            cubic-bezier(0.22, 1, 0.36, 1)
+            0.25s;
+        }
+
+        .is-revealed .hackathons-label-line {
+          scale: 1 1;
+        }
+
+        .hackathons-title-mask {
+          display: block;
+          overflow: hidden;
+          padding-bottom: 0.12em;
+          margin-bottom: -0.12em;
+        }
+
+        .hackathons-title-line {
+          display: inline-block;
+          translate: 0 115%;
+
+          transition:
+            translate
+            0.95s
+            cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .hackathons-title-mask:nth-child(1) .hackathons-title-line {
+          transition-delay: 0.15s;
+        }
+
+        .hackathons-title-mask:nth-child(2) .hackathons-title-line {
+          transition-delay: 0.28s;
+        }
+
+        .is-revealed .hackathons-title-line {
+          translate: 0 0;
+        }
+
+        .hackathons-title-accent {
+          color: #596A99;
+
+          background-image:
+            linear-gradient(
+              100deg,
+              #596A99 0%,
+              #596A99 40%,
+              #3A4A78 50%,
+              #596A99 60%,
+              #596A99 100%
+            );
+
+          background-size: 200% 100%;
+          background-position: 0% 50%;
+
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .is-revealed .hackathons-title-accent {
+          animation:
+            hackathonsTitleShimmer
+            9s
+            linear
+            1.2s
+            infinite;
+        }
+
+        @keyframes hackathonsTitleShimmer {
+          from {
+            background-position: 0% 50%;
+          }
+          to {
+            background-position: 200% 50%;
+          }
+        }
+
+        /* ===============================================
+           HACKATHON CARD — scroll entrance
+        =============================================== */
+
+        .hackathon-card {
+          opacity: 0;
+          translate: 0 40px;
+          scale: 0.94;
+          filter: blur(6px);
+
+          transition:
+            opacity
+            0.95s
+            cubic-bezier(0.22, 1, 0.36, 1),
+
+            translate
+            0.95s
+            cubic-bezier(0.22, 1, 0.36, 1),
+
+            scale
+            1s
+            cubic-bezier(0.34, 1.4, 0.64, 1),
+
+            filter
+            0.95s
+            cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .is-revealed .hackathon-card {
+          opacity: 1;
+          translate: 0 0;
+          scale: 1;
+          filter: blur(0);
+
+          transition-delay:
+            calc(var(--card-index, 0) * 0.14s + 0.35s);
+        }
+
+        /* ===============================================
+           PAGINATION — fade + rise
+        =============================================== */
+
+        .hackathons-pagination {
+          opacity: 0;
+          translate: 0 22px;
+
+          transition:
+            opacity
+            0.9s
+            cubic-bezier(0.22, 1, 0.36, 1)
+            0.7s,
+
+            translate
+            0.9s
+            cubic-bezier(0.22, 1, 0.36, 1)
+            0.7s;
+        }
+
+        .is-revealed .hackathons-pagination {
+          opacity: 1;
+          translate: 0 0;
+        }
+
+        /* ===============================================
+           REDUCED MOTION
+        =============================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+          .hackathons-label,
+          .hackathons-title-line,
+          .hackathons-label-line,
+          .hackathon-card,
+          .hackathons-pagination {
+            opacity: 1 !important;
+            translate: 0 0 !important;
+            scale: 1 !important;
+            filter: none !important;
+            transition: none !important;
+          }
+
+          .hackathons-title-accent {
+            animation: none !important;
+            -webkit-text-fill-color: #596A99;
+            background: none;
+          }
+        }
+      `}</style>
     </>
   );
 }
