@@ -84,7 +84,7 @@ function About() {
       className="relative isolate w-full overflow-hidden bg-[#F0E4B8] px-6 py-24 sm:px-8 lg:px-10 lg:py-32"
     >
       {/* =================================================
-          BACKGROUND DECORATION
+          BACKGROUND DECORATION (glow only — no grid)
       ================================================= */}
 
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -116,31 +116,6 @@ function About() {
             bg-[#596A99]/[0.07]
             blur-[100px]
           "
-        />
-
-        {/* Technical grid — seamless diagonal drift */}
-        <motion.div
-          className="absolute -inset-[55px] opacity-[0.035]"
-          style={{
-            backgroundImage: `
-              linear-gradient(
-                #3A4A78 1px,
-                transparent 1px
-              ),
-              linear-gradient(
-                90deg,
-                #3A4A78 1px,
-                transparent 1px
-              )
-            `,
-            backgroundSize: "55px 55px",
-          }}
-          animate={reduce ? {} : { x: [0, 55], y: [0, 55] }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            ease: "linear",
-          }}
         />
       </div>
 
