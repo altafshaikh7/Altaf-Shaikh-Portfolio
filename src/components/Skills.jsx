@@ -231,43 +231,51 @@ function Skills() {
     active: false,
   });
 
+  /* =================================================
+     ENTRANCE ANIMATION TRIGGER
+  ================================================= */
+
+  const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setRevealed(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    observer.observe(el);
+
+    return () => observer.disconnect();
+  }, []);
+
+  /* =================================================
+     CURSOR PUSH EFFECT (unchanged logic)
+  ================================================= */
+
   useEffect(() => {
     const handleMouseMove = (event) => {
       const section = sectionRef.current;
 
       if (!section) return;
 
-      /*
-       * Exact section position
-       */
-      const rect =
-        section.getBoundingClientRect();
+      const rect = section.getBoundingClientRect();
 
-      /*
-       * Exact cursor position
-       * relative to Skills section
-       */
-      const cursorX =
-        event.clientX - rect.left;
+      const cursorX = event.clientX - rect.left;
+      const cursorY = event.clientY - rect.top;
 
-      const cursorY =
-        event.clientY - rect.top;
+      const normalizedX = cursorX / rect.width;
+      const normalizedY = cursorY / rect.height;
 
-      /*
-       * Normalized position
-       * 0 → left/top
-       * 1 → right/bottom
-       */
-      const normalizedX =
-        cursorX / rect.width;
-
-      const normalizedY =
-        cursorY / rect.height;
-
-      /*
-       * Check whether cursor
-       * is actually inside section
-       */
       const inside =
         cursorX >= 0 &&
         cursorX <= rect.width &&
@@ -275,16 +283,8 @@ function Skills() {
         cursorY <= rect.height;
 
       setMouse({
-        x: Math.max(
-          0,
-          Math.min(1, normalizedX)
-        ),
-
-        y: Math.max(
-          0,
-          Math.min(1, normalizedY)
-        ),
-
+        x: Math.max(0, Math.min(1, normalizedX)),
+        y: Math.max(0, Math.min(1, normalizedY)),
         active: inside,
       });
     };
@@ -297,10 +297,7 @@ function Skills() {
       });
     };
 
-    window.addEventListener(
-      "mousemove",
-      handleMouseMove
-    );
+    window.addEventListener("mousemove", handleMouseMove);
 
     sectionRef.current?.addEventListener(
       "mouseleave",
@@ -324,25 +321,36 @@ function Skills() {
     <section
       id="skills"
       ref={sectionRef}
-      className="skills-section"
+      className={`skills-section ${
+        revealed ? "is-revealed" : ""
+      }`}
     >
       <div className="skills-container">
 
         {/* ============================
-            HEADER
+            HEADER  (About.jsx style)
         ============================ */}
 
         <div className="skills-header">
           <p className="skills-label">
+            <span
+              className="skills-label-line"
+              aria-hidden="true"
+            />
             Skills
           </p>
 
           <h2 className="skills-title">
-            Technologies I
-            <br />
+            <span className="skills-title-mask">
+              <span className="skills-title-line">
+                Technologies I
+              </span>
+            </span>
 
-            <span>
-              work with.
+            <span className="skills-title-mask">
+              <span className="skills-title-line skills-title-accent">
+                work with.
+              </span>
             </span>
           </h2>
         </div>
@@ -356,70 +364,32 @@ function Skills() {
           {skills.map((skill, index) => {
             const Icon = skill.icon;
 
-            /*
-             * Bubble's original position
-             */
-            const bubbleX =
-              skill.x / 100;
+            const bubbleX = skill.x / 100;
+            const bubbleY = skill.y / 100;
 
-            const bubbleY =
-              skill.y / 100;
+            const distanceX = mouse.x - bubbleX;
+            const distanceY = mouse.y - bubbleY;
 
-            /*
-             * Exact cursor-to-bubble distance
-             */
-            const distanceX =
-              mouse.x - bubbleX;
+            const distance = Math.sqrt(
+              distanceX * distanceX +
+                distanceY * distanceY
+            );
 
-            const distanceY =
-              mouse.y - bubbleY;
-
-            const distance =
-              Math.sqrt(
-                distanceX * distanceX +
-                  distanceY * distanceY
-              );
-
-            /*
-             * Reaction radius
-             *
-             * Smaller = more localized
-             * Larger = more bubbles react
-             */
             const reactionRadius = 0.24;
 
-            /*
-             * 1 = cursor extremely close
-             * 0 = cursor far away
-             */
-            const influence =
-              Math.max(
-                0,
-                1 -
-                  distance /
-                    reactionRadius
-              );
+            const influence = Math.max(
+              0,
+              1 - distance / reactionRadius
+            );
 
-            /*
-             * Smooth force curve
-             */
-            const force =
-              influence * influence;
+            const force = influence * influence;
 
-            /*
-             * Push bubble away
-             * from exact cursor location
-             */
             const moveX = mouse.active
-              ? -distanceX *
-                force *
-                210
+              ? -distanceX * force * 210
               : 0;
 
             const moveY = mouse.active
-              ? -distanceY *
-                force *
-                210
+              ? -distanceY * force * 210
               : 0;
 
             return (
@@ -430,17 +400,14 @@ function Skills() {
                   left: `${skill.x}%`,
                   top: `${skill.y}%`,
 
-                  "--move-x":
-                    `${moveX}px`,
+                  "--move-x": `${moveX}px`,
+                  "--move-y": `${moveY}px`,
 
-                  "--move-y":
-                    `${moveY}px`,
+                  "--delay": skill.delay,
+                  "--duration": skill.duration,
 
-                  "--delay":
-                    skill.delay,
-
-                  "--duration":
-                    skill.duration,
+                  "--enter-delay":
+                    `${index * 0.045}s`,
                 }}
               >
                 <div
@@ -521,7 +488,9 @@ function Skills() {
 
 
         /* ===============================================
-           HEADER
+           HEADER  — About.jsx style
+           (label with line + masked line reveal
+            + gradient shimmer on accent line)
         =============================================== */
 
         .skills-header {
@@ -531,6 +500,12 @@ function Skills() {
         }
 
         .skills-label {
+          display: flex;
+
+          align-items: center;
+
+          gap: 12px;
+
           margin:
             0
             0
@@ -547,6 +522,73 @@ function Skills() {
 
           text-transform:
             uppercase;
+
+          opacity: 0;
+
+          translate:
+            -18px
+            0;
+
+          transition:
+            opacity
+            0.8s
+            cubic-bezier(
+              0.22,
+              1,
+              0.36,
+              1
+            )
+            0.1s,
+
+            translate
+            0.8s
+            cubic-bezier(
+              0.22,
+              1,
+              0.36,
+              1
+            )
+            0.1s;
+        }
+
+        .is-revealed .skills-label {
+          opacity: 1;
+          translate: 0 0;
+        }
+
+        .skills-label-line {
+          display: inline-block;
+
+          width: 32px;
+          height: 1px;
+
+          background:
+            rgba(
+              89,
+              106,
+              153,
+              0.6
+            );
+
+          transform-origin:
+            left center;
+
+          scale: 0 1;
+
+          transition:
+            scale
+            0.8s
+            cubic-bezier(
+              0.22,
+              1,
+              0.36,
+              1
+            )
+            0.25s;
+        }
+
+        .is-revealed .skills-label-line {
+          scale: 1 1;
         }
 
         .skills-title {
@@ -561,18 +603,114 @@ function Skills() {
               72px
             );
 
-          line-height:
-            0.98;
+          line-height: 1.05;
 
-          font-weight:
-            900;
+          font-weight: 900;
 
           letter-spacing:
             -0.045em;
         }
 
-        .skills-title span {
+        .skills-title-mask {
+          display: block;
+
+          overflow: hidden;
+
+          padding-bottom:
+            0.12em;
+
+          margin-bottom:
+            -0.12em;
+        }
+
+        .skills-title-line {
+          display: inline-block;
+
+          translate:
+            0
+            115%;
+
+          transition:
+            translate
+            0.95s
+            cubic-bezier(
+              0.22,
+              1,
+              0.36,
+              1
+            );
+        }
+
+        .skills-title-mask:nth-child(1)
+        .skills-title-line {
+          transition-delay:
+            0.15s;
+        }
+
+        .skills-title-mask:nth-child(2)
+        .skills-title-line {
+          transition-delay:
+            0.28s;
+        }
+
+        .is-revealed
+        .skills-title-line {
+          translate: 0 0;
+        }
+
+        .skills-title-accent {
           color: #596A99;
+
+          background-image:
+            linear-gradient(
+              100deg,
+
+              #596A99 0%,
+              #596A99 40%,
+
+              #3A4A78 50%,
+
+              #596A99 60%,
+              #596A99 100%
+            );
+
+          background-size:
+            200% 100%;
+
+          background-position:
+            0% 50%;
+
+          -webkit-background-clip:
+            text;
+
+          background-clip:
+            text;
+
+          -webkit-text-fill-color:
+            transparent;
+        }
+
+        .is-revealed
+        .skills-title-accent {
+          animation:
+            titleShimmer
+            9s
+            linear
+            1.2s
+            infinite;
+        }
+
+        @keyframes titleShimmer {
+
+          from {
+            background-position:
+              0% 50%;
+          }
+
+          to {
+            background-position:
+              200% 50%;
+          }
         }
 
 
@@ -595,11 +733,6 @@ function Skills() {
 
         /* ===============================================
            BUBBLE POSITION
-           
-           IMPORTANT:
-           No animation here.
-           Transform is controlled ONLY
-           by cursor location.
         =============================================== */
 
         .skill-position {
@@ -612,6 +745,10 @@ function Skills() {
               0
             );
 
+          opacity: 0;
+
+          scale: 0.4;
+
           transition:
             transform
             0.12s
@@ -620,12 +757,39 @@ function Skills() {
               1,
               0.36,
               1
-            );
+            ),
+
+            opacity
+            0.85s
+            cubic-bezier(
+              0.22,
+              1,
+              0.36,
+              1
+            )
+            var(--enter-delay, 0s),
+
+            scale
+            0.9s
+            cubic-bezier(
+              0.34,
+              1.56,
+              0.64,
+              1
+            )
+            var(--enter-delay, 0s);
 
           z-index: 2;
 
           will-change:
-            transform;
+            transform,
+            opacity,
+            scale;
+        }
+
+        .is-revealed .skill-position {
+          opacity: 1;
+          scale: 1;
         }
 
 
@@ -752,20 +916,27 @@ function Skills() {
             var(--delay);
 
           transition:
-            transform
-            0.25s
-            ease,
+            scale
+            0.35s
+            cubic-bezier(
+              0.34,
+              1.56,
+              0.64,
+              1
+            ),
 
             filter
-            0.25s
+            0.35s
             ease,
 
             box-shadow
-            0.25s
+            0.35s
             ease;
 
           will-change:
-            transform;
+            translate,
+            rotate,
+            scale;
         }
 
 
@@ -795,35 +966,55 @@ function Skills() {
 
         @keyframes bubbleFloat {
 
-          0%,
-          100% {
-            transform:
-              translateY(0px)
-              rotate(0deg);
+          0% {
+            translate:
+              0
+              0;
+
+            rotate:
+              0deg;
           }
 
           25% {
-            transform:
-              translateY(-7px)
-              rotate(1deg);
+            translate:
+              0
+              -7px;
+
+            rotate:
+              1.2deg;
           }
 
           50% {
-            transform:
-              translateY(-13px)
-              rotate(-1.5deg);
+            translate:
+              0
+              -14px;
+
+            rotate:
+              -1.6deg;
           }
 
           75% {
-            transform:
-              translateY(-6px)
-              rotate(1deg);
+            translate:
+              0
+              -6px;
+
+            rotate:
+              1deg;
+          }
+
+          100% {
+            translate:
+              0
+              0;
+
+            rotate:
+              0deg;
           }
         }
 
 
         /* ===============================================
-           GLASS HIGHLIGHT
+           GLASS HIGHLIGHT — subtle shimmer
         =============================================== */
 
         .skill-bubble::before {
@@ -855,6 +1046,27 @@ function Skills() {
 
           pointer-events:
             none;
+
+          animation:
+            highlightShimmer
+            5s
+            ease-in-out
+            infinite;
+
+          animation-delay:
+            var(--delay);
+        }
+
+        @keyframes highlightShimmer {
+
+          0%,
+          100% {
+            opacity: 0.82;
+          }
+
+          50% {
+            opacity: 0.55;
+          }
         }
 
 
@@ -938,6 +1150,15 @@ function Skills() {
 
           transition:
             transform
+            0.4s
+            cubic-bezier(
+              0.34,
+              1.56,
+              0.64,
+              1
+            ),
+
+            color
             0.3s
             ease;
         }
@@ -1000,6 +1221,20 @@ function Skills() {
               120,
               0.20
             );
+
+          transition:
+            transform
+            0.4s
+            cubic-bezier(
+              0.34,
+              1.56,
+              0.64,
+              1
+            ),
+
+            box-shadow
+            0.35s
+            ease;
         }
 
         .dsa-icon {
@@ -1038,6 +1273,11 @@ function Skills() {
 
           overflow-wrap:
             anywhere;
+
+          transition:
+            color
+            0.3s
+            ease;
         }
 
         .large .skill-name {
@@ -1057,8 +1297,8 @@ function Skills() {
         ) {
 
           .skill-bubble:hover {
-            transform:
-              scale(1.08);
+            scale:
+              1.08;
 
             filter:
               brightness(1.07);
@@ -1111,7 +1351,7 @@ function Skills() {
           .skill-bubble:hover
           .skill-icon {
             transform:
-              scale(1.15)
+              scale(1.18)
               rotate(-7deg);
           }
 
@@ -1120,6 +1360,17 @@ function Skills() {
             transform:
               scale(1.15)
               rotate(-5deg);
+
+            box-shadow:
+              0
+              0
+              20px
+              rgba(
+                58,
+                74,
+                120,
+                0.35
+              );
           }
 
           .skill-bubble:hover
@@ -1131,7 +1382,7 @@ function Skills() {
 
 
         /* ===============================================
-           BOTTOM TEXT
+           BOTTOM TEXT — entrance
         =============================================== */
 
         .skills-bottom {
@@ -1144,6 +1395,38 @@ function Skills() {
           border-top:
             1px solid
             #D9CC9C;
+
+          opacity: 0;
+
+          translate:
+            0
+            25px;
+
+          transition:
+            opacity
+            0.9s
+            cubic-bezier(
+              0.22,
+              1,
+              0.36,
+              1
+            )
+            0.5s,
+
+            translate
+            0.9s
+            cubic-bezier(
+              0.22,
+              1,
+              0.36,
+              1
+            )
+            0.5s;
+        }
+
+        .is-revealed .skills-bottom {
+          opacity: 1;
+          translate: 0 0;
         }
 
         .skills-bottom p {
@@ -1981,9 +2264,6 @@ function Skills() {
 
         /* ===============================================
            TOUCH DEVICES
-           
-           No tap/click movement.
-           Only automatic floating remains.
         =============================================== */
 
         @media (
@@ -2002,7 +2282,25 @@ function Skills() {
               ) !important;
 
             transition:
-              none;
+              opacity
+              0.85s
+              cubic-bezier(
+                0.22,
+                1,
+                0.36,
+                1
+              )
+              var(--enter-delay, 0s),
+
+              scale
+              0.9s
+              cubic-bezier(
+                0.34,
+                1.56,
+                0.64,
+                1
+              )
+              var(--enter-delay, 0s);
           }
         }
 
@@ -2020,9 +2318,73 @@ function Skills() {
               none !important;
           }
 
+          .skill-bubble::before {
+            animation:
+              none !important;
+          }
+
           .skill-position {
+            transform:
+              translate3d(
+                var(--move-x),
+                var(--move-y),
+                0
+              ) !important;
+
+            opacity:
+              1 !important;
+
+            scale:
+              1 !important;
+
             transition:
               none !important;
+          }
+
+          .skills-label,
+          .skills-title,
+          .skills-bottom {
+            opacity:
+              1 !important;
+
+            translate:
+              0
+              0 !important;
+
+            filter:
+              none !important;
+
+            transition:
+              none !important;
+          }
+
+          .skills-title-line {
+            translate:
+              0
+              0 !important;
+
+            transition:
+              none !important;
+          }
+
+          .skills-label-line {
+            scale:
+              1
+              1 !important;
+
+            transition:
+              none !important;
+          }
+
+          .skills-title-accent {
+            animation:
+              none !important;
+
+            -webkit-text-fill-color:
+              #596A99;
+
+            background:
+              none;
           }
         }
 
