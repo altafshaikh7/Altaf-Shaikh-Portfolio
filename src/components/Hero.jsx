@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import profileImage from "../assets/profile.jpg";
 
 function Hero() {
   const [revealed, setRevealed] = useState(false);
@@ -17,6 +18,7 @@ function Hero() {
 
   useEffect(() => {
     const timer = setTimeout(() => setRevealed(true), 60);
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -24,25 +26,29 @@ function Hero() {
     if (!revealed) return;
 
     let firstIndex = 0;
+    let firstTimer;
+    let lastTimer;
+    let lastTimeout;
+    let dotTimeout;
 
-    const firstTimer = setInterval(() => {
+    firstTimer = setInterval(() => {
       firstIndex++;
       setFirstCount(firstIndex);
 
       if (firstIndex >= FIRST_NAME.length) {
         clearInterval(firstTimer);
 
-        setTimeout(() => {
+        lastTimeout = setTimeout(() => {
           let lastIndex = 0;
 
-          const lastTimer = setInterval(() => {
+          lastTimer = setInterval(() => {
             lastIndex++;
             setLastCount(lastIndex);
 
             if (lastIndex >= LAST_NAME.length) {
               clearInterval(lastTimer);
 
-              setTimeout(() => {
+              dotTimeout = setTimeout(() => {
                 setShowDot(true);
                 setTypingDone(true);
               }, 260);
@@ -52,7 +58,12 @@ function Hero() {
       }
     }, 175);
 
-    return () => clearInterval(firstTimer);
+    return () => {
+      clearInterval(firstTimer);
+      clearInterval(lastTimer);
+      clearTimeout(lastTimeout);
+      clearTimeout(dotTimeout);
+    };
   }, [revealed]);
 
   /* =====================================================
@@ -61,13 +72,17 @@ function Hero() {
 
   const scrollToAbout = () => {
     const aboutSection = document.getElementById("about");
+
     if (aboutSection) {
-      aboutSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      aboutSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
   };
 
   /* =====================================================
-     RENDER CHARS — each char slides + fades in
+     RENDER CHARS
   ===================================================== */
 
   const renderChars = (text, visibleCount) =>
@@ -81,7 +96,9 @@ function Hero() {
       </span>
     ));
 
-  const cursorOnFirst = firstCount > 0 && firstCount < FIRST_NAME.length;
+  const cursorOnFirst =
+    firstCount > 0 && firstCount < FIRST_NAME.length;
+
   const cursorOnLast =
     firstCount >= FIRST_NAME.length &&
     lastCount > 0 &&
@@ -152,9 +169,7 @@ function Hero() {
             Hello, I'm
           </p>
 
-          {/* =================================================
-              NAME — smooth typewriter
-          ================================================= */}
+          {/* NAME */}
 
           <h1 className="hero-title max-w-4xl text-5xl font-black leading-[0.95] tracking-[-0.04em] text-[#3A4A78] sm:text-6xl md:text-7xl lg:text-8xl">
             {/* First name */}
@@ -166,13 +181,16 @@ function Hero() {
                   {renderChars(FIRST_NAME, firstCount)}
 
                   {cursorOnFirst && (
-                    <span className="hero-cursor" aria-hidden="true" />
+                    <span
+                      className="hero-cursor"
+                      aria-hidden="true"
+                    />
                   )}
                 </span>
               </span>
             </span>
 
-            {/* Last name + dot */}
+            {/* Last name */}
             <span className="hero-title-mask">
               <span className="hero-title-line">
                 <span className="sr-only">{LAST_NAME}</span>
@@ -181,7 +199,10 @@ function Hero() {
                   {renderChars(LAST_NAME, lastCount)}
 
                   {cursorOnLast && (
-                    <span className="hero-cursor" aria-hidden="true" />
+                    <span
+                      className="hero-cursor"
+                      aria-hidden="true"
+                    />
                   )}
 
                   {showDot && (
@@ -210,16 +231,16 @@ function Hero() {
             using AI/ML and full-stack technologies.
           </p>
 
-          {/* =================================================
-              BUTTONS
-          ================================================= */}
+          {/* BUTTONS */}
 
           <div className="hero-buttons mt-8 flex flex-col gap-3 sm:flex-row">
             <a
               href="#projects"
               className="hero-btn group relative overflow-hidden rounded-full bg-[#3A4A78] px-7 py-3.5 text-center text-sm font-semibold text-white shadow-[0_12px_30px_-12px_rgba(58,74,120,0.6)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#2F3D68] hover:shadow-[0_20px_40px_-12px_rgba(58,74,120,0.7)]"
             >
-              <span className="relative z-10">View My Work</span>
+              <span className="relative z-10">
+                View My Work
+              </span>
 
               <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
             </a>
@@ -232,9 +253,7 @@ function Hero() {
             </a>
           </div>
 
-          {/* =================================================
-              SOCIAL LINKS
-          ================================================= */}
+          {/* SOCIAL LINKS */}
 
           <div className="hero-social mt-8 flex flex-wrap items-center gap-5">
             <a
@@ -264,7 +283,7 @@ function Hero() {
             <span className="h-1 w-1 rounded-full bg-[#596A99]" />
 
             <a
-              href="https://www.instagram.com/er.altaf_shaikh?stkn=bjhvcnZ1OTU3dHF0"
+              href="https://www.instagram.com/er.altaf_shaikh"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
@@ -305,15 +324,20 @@ function Hero() {
           <div className="hero-photo-dots pointer-events-none absolute inset-0 flex items-center justify-center lg:justify-end">
             <div className="relative h-[360px] w-[360px] sm:h-[440px] sm:w-[440px] lg:h-[500px] lg:w-[500px]">
               <span className="absolute -top-1 left-1/2 h-2 w-2 -translate-x-1/2 rounded-full bg-[#3A4A78]" />
+
               <span className="absolute -bottom-1 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-[#596A99]" />
+
               <span className="absolute -left-1 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-[#596A99]" />
             </div>
           </div>
 
           <div className="hero-photo relative z-10 w-full max-w-[420px] sm:max-w-[480px] lg:max-w-[520px]">
             <div className="hero-photo-crop relative w-full overflow-hidden">
+              {/* IMPORTANT:
+                  Vite-safe image import
+              */}
               <img
-                src="/src/assets/profile.jpg"
+                src={profileImage}
                 alt="Altaf Shaikh"
                 className="hero-photo-img block h-auto w-full object-contain object-top"
               />
@@ -381,10 +405,6 @@ function Hero() {
       ================================================= */}
 
       <style>{`
-        /* ===============================================
-           AMBIENT BACKGROUND
-        =============================================== */
-
         .hero-glow {
           animation: heroGlowFloat 12s ease-in-out infinite;
         }
@@ -395,8 +415,13 @@ function Hero() {
         }
 
         @keyframes heroGlowFloat {
-          0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-          50%      { transform: translate3d(24px, -32px, 0) scale(1.08); }
+          0%, 100% {
+            transform: translate3d(0, 0, 0) scale(1);
+          }
+
+          50% {
+            transform: translate3d(24px, -32px, 0) scale(1.08);
+          }
         }
 
         .hero-grid {
@@ -404,13 +429,14 @@ function Hero() {
         }
 
         @keyframes heroGridDrift {
-          from { transform: translate3d(0, 0, 0); }
-          to   { transform: translate3d(55px, 55px, 0); }
-        }
+          from {
+            transform: translate3d(0, 0, 0);
+          }
 
-        /* ===============================================
-           LABEL
-        =============================================== */
+          to {
+            transform: translate3d(55px, 55px, 0);
+          }
+        }
 
         .hero-label {
           display: flex;
@@ -423,7 +449,10 @@ function Hero() {
             translate 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
         }
 
-        .is-revealed .hero-label { opacity: 1; translate: 0 0; }
+        .is-revealed .hero-label {
+          opacity: 1;
+          translate: 0 0;
+        }
 
         .hero-label-line {
           display: inline-block;
@@ -435,11 +464,9 @@ function Hero() {
           transition: scale 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
         }
 
-        .is-revealed .hero-label-line { scale: 1 1; }
-
-        /* ===============================================
-           TITLE
-        =============================================== */
+        .is-revealed .hero-label-line {
+          scale: 1 1;
+        }
 
         .hero-title-mask {
           display: block;
@@ -465,18 +492,12 @@ function Hero() {
           border: 0;
         }
 
-        /* ===============================================
-           SMOOTH CHARACTER REVEAL
-        =============================================== */
-
         .hero-char {
           display: inline-block;
-
           opacity: 0;
           translate: 0 0.9em;
           filter: blur(8px);
           scale: 0.7;
-
           transition:
             opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
             translate 0.7s cubic-bezier(0.22, 1, 0.36, 1),
@@ -490,10 +511,6 @@ function Hero() {
           filter: blur(0);
           scale: 1;
         }
-
-        /* ===============================================
-           TYPEWRITER CURSOR
-        =============================================== */
 
         .hero-cursor {
           display: inline-block;
@@ -512,15 +529,14 @@ function Hero() {
         }
 
         @keyframes heroCursorBlink {
-          0%,
-          45% { opacity: 1; }
-          50%,
-          100% { opacity: 0.1; }
-        }
+          0%, 45% {
+            opacity: 1;
+          }
 
-        /* ===============================================
-           DOT POP
-        =============================================== */
+          50%, 100% {
+            opacity: 0.1;
+          }
+        }
 
         .hero-title-dot-pop {
           display: inline-block;
@@ -535,12 +551,14 @@ function Hero() {
             translate: 0 10px;
             filter: blur(6px);
           }
+
           60% {
             opacity: 1;
             scale: 1.18;
             translate: 0 -2px;
             filter: blur(0);
           }
+
           100% {
             opacity: 1;
             scale: 1;
@@ -548,10 +566,6 @@ function Hero() {
             filter: blur(0);
           }
         }
-
-        /* ===============================================
-           ROLE — waits for typing to finish
-        =============================================== */
 
         .hero-role {
           opacity: 0;
@@ -569,10 +583,6 @@ function Hero() {
           filter: blur(0);
         }
 
-        /* ===============================================
-           DESCRIPTION
-        =============================================== */
-
         .hero-desc {
           opacity: 0;
           translate: 0 22px;
@@ -585,10 +595,6 @@ function Hero() {
           opacity: 1;
           translate: 0 0;
         }
-
-        /* ===============================================
-           BUTTONS
-        =============================================== */
 
         .hero-buttons {
           opacity: 0;
@@ -603,10 +609,6 @@ function Hero() {
           translate: 0 0;
         }
 
-        /* ===============================================
-           SOCIAL
-        =============================================== */
-
         .hero-social {
           opacity: 0;
           translate: 0 20px;
@@ -619,10 +621,6 @@ function Hero() {
           opacity: 1;
           translate: 0 0;
         }
-
-        /* ===============================================
-           PHOTO
-        =============================================== */
 
         .hero-photo-wrap {
           opacity: 0;
@@ -648,13 +646,14 @@ function Hero() {
         }
 
         @keyframes heroPhotoFloat {
-          0%, 100% { translate: 0 0; }
-          50%      { translate: 0 -16px; }
-        }
+          0%, 100% {
+            translate: 0 0;
+          }
 
-        /* ===============================================
-           PHOTO CROP
-        =============================================== */
+          50% {
+            translate: 0 -16px;
+          }
+        }
 
         .hero-photo-crop {
           max-height: 620px;
@@ -668,6 +667,7 @@ function Hero() {
             rgba(0, 0, 0, 0.1) 95%,
             transparent 100%
           );
+
           mask-image: linear-gradient(
             to bottom,
             #000 0%,
@@ -686,12 +686,10 @@ function Hero() {
           height: auto;
           object-fit: contain;
           object-position: top center;
-          filter: drop-shadow(0 30px 45px rgba(58, 74, 120, 0.25));
+          filter: drop-shadow(
+            0 30px 45px rgba(58, 74, 120, 0.25)
+          );
         }
-
-        /* ===============================================
-           FADE OVERLAYS
-        =============================================== */
 
         .hero-photo-fade {
           background: linear-gradient(
@@ -715,17 +713,20 @@ function Hero() {
           );
         }
 
-        /* ===============================================
-           PHOTO GLOW / RING
-        =============================================== */
-
         .hero-photo-glow {
           animation: heroGlowBreathe 7s ease-in-out infinite;
         }
 
         @keyframes heroGlowBreathe {
-          0%, 100% { opacity: 0.7; scale: 1; }
-          50%      { opacity: 1; scale: 1.06; }
+          0%, 100% {
+            opacity: 0.7;
+            scale: 1;
+          }
+
+          50% {
+            opacity: 1;
+            scale: 1.06;
+          }
         }
 
         .hero-photo-ring {
@@ -733,15 +734,22 @@ function Hero() {
           transition: opacity 1.2s ease 0.9s;
         }
 
-        .is-revealed .hero-photo-ring { opacity: 1; }
+        .is-revealed .hero-photo-ring {
+          opacity: 1;
+        }
 
         .hero-photo-ring > div {
           animation: heroRingSpin 40s linear infinite;
         }
 
         @keyframes heroRingSpin {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
+          from {
+            transform: rotate(0deg);
+          }
+
+          to {
+            transform: rotate(360deg);
+          }
         }
 
         .hero-photo-dots {
@@ -749,20 +757,23 @@ function Hero() {
           transition: opacity 1.2s ease 1s;
         }
 
-        .is-revealed .hero-photo-dots { opacity: 1; }
+        .is-revealed .hero-photo-dots {
+          opacity: 1;
+        }
 
         .hero-photo-dots > div {
           animation: heroDotsSpin 26s linear infinite;
         }
 
         @keyframes heroDotsSpin {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
-        }
+          from {
+            transform: rotate(0deg);
+          }
 
-        /* =================================================
-           PREMIUM MOUSE SCROLL
-        ================================================= */
+          to {
+            transform: rotate(360deg);
+          }
+        }
 
         .hero-scroll {
           opacity: 0;
@@ -771,9 +782,13 @@ function Hero() {
             transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        .is-revealed .hero-scroll { opacity: 1; }
+        .is-revealed .hero-scroll {
+          opacity: 1;
+        }
 
-        .hero-scroll-text { white-space: nowrap; }
+        .hero-scroll-text {
+          white-space: nowrap;
+        }
 
         .hero-mouse {
           box-shadow:
@@ -782,15 +797,35 @@ function Hero() {
         }
 
         .hero-mouse-wheel {
-          animation: mouseWheelMove 2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+          animation:
+            mouseWheelMove 2s cubic-bezier(0.65, 0, 0.35, 1)
+            infinite;
         }
 
         @keyframes mouseWheelMove {
-          0%   { transform: translate(-50%, 0); opacity: 0; }
-          15%  { opacity: 1; }
-          55%  { transform: translate(-50%, 20px); opacity: 0.85; }
-          75%  { transform: translate(-50%, 25px); opacity: 0; }
-          100% { transform: translate(-50%, 25px); opacity: 0; }
+          0% {
+            transform: translate(-50%, 0);
+            opacity: 0;
+          }
+
+          15% {
+            opacity: 1;
+          }
+
+          55% {
+            transform: translate(-50%, 20px);
+            opacity: 0.85;
+          }
+
+          75% {
+            transform: translate(-50%, 25px);
+            opacity: 0;
+          }
+
+          100% {
+            transform: translate(-50%, 25px);
+            opacity: 0;
+          }
         }
 
         .hero-scroll-arrow {
@@ -798,8 +833,15 @@ function Hero() {
         }
 
         @keyframes scrollArrowMove {
-          0%, 100% { transform: translateY(0); opacity: 0.45; }
-          50%      { transform: translateY(4px); opacity: 1; }
+          0%, 100% {
+            transform: translateY(0);
+            opacity: 0.45;
+          }
+
+          50% {
+            transform: translateY(4px);
+            opacity: 1;
+          }
         }
 
         .hero-scroll-line {
@@ -807,19 +849,29 @@ function Hero() {
         }
 
         @keyframes scrollLinePulse {
-          0%, 100% { opacity: 0.3; transform: scaleX(1); }
-          50%      { opacity: 0.8; transform: scaleX(2); }
+          0%, 100% {
+            opacity: 0.3;
+            transform: scaleX(1);
+          }
+
+          50% {
+            opacity: 0.8;
+            transform: scaleX(2);
+          }
         }
 
-        .hero-scroll:hover .hero-mouse-wheel { animation-duration: 1s; }
-        .hero-scroll:hover .hero-scroll-text { transform: translateY(-2px); }
+        .hero-scroll:hover .hero-mouse-wheel {
+          animation-duration: 1s;
+        }
 
-        /* =================================================
-           RESPONSIVE
-        ================================================= */
+        .hero-scroll:hover .hero-scroll-text {
+          transform: translateY(-2px);
+        }
 
         @media (max-width: 640px) {
-          .hero-scroll { bottom: 16px; }
+          .hero-scroll {
+            bottom: 16px;
+          }
 
           .hero-scroll-text {
             font-size: 7px;
@@ -833,6 +885,7 @@ function Hero() {
 
           .hero-photo-crop {
             max-height: 460px;
+
             -webkit-mask-image: linear-gradient(
               to bottom,
               #000 0%,
@@ -842,6 +895,7 @@ function Hero() {
               rgba(0, 0, 0, 0.2) 90%,
               transparent 100%
             );
+
             mask-image: linear-gradient(
               to bottom,
               #000 0%,
@@ -853,10 +907,6 @@ function Hero() {
             );
           }
         }
-
-        /* =================================================
-           REDUCED MOTION
-        ================================================= */
 
         @media (prefers-reduced-motion: reduce) {
           .hero-glow,
@@ -897,7 +947,9 @@ function Hero() {
             transition: none !important;
           }
 
-          .hero-cursor { opacity: 1 !important; }
+          .hero-cursor {
+            opacity: 1 !important;
+          }
         }
       `}</style>
     </section>
