@@ -93,7 +93,12 @@ const hackathons = [
 
 function Hackathons() {
   const [page, setPage] = useState(0);
-  const [selectedHackathon, setSelectedHackathon] = useState(null);
+  const [selectedHackathon, setSelectedHackathon] =
+    useState(null);
+
+  // NEW:
+  // Stores the selected image's aspect ratio.
+  const [imageRatio, setImageRatio] = useState(null);
 
   const itemsPerPage = 3;
 
@@ -108,11 +113,37 @@ function Hackathons() {
     startIndex + itemsPerPage
   );
 
+  // =====================================================
+  // OPEN MODAL
+  // =====================================================
+
+  const openHackathon = (hackathon) => {
+    setImageRatio(null);
+    setSelectedHackathon(hackathon);
+  };
+
+  // =====================================================
+  // CLOSE MODAL
+  // =====================================================
+
+  const closeHackathon = () => {
+    setSelectedHackathon(null);
+    setImageRatio(null);
+  };
+
+  // =====================================================
+  // NEXT PAGE
+  // =====================================================
+
   const nextPage = () => {
     if (page < totalPages - 1) {
       setPage((prev) => prev + 1);
     }
   };
+
+  // =====================================================
+  // PREVIOUS PAGE
+  // =====================================================
 
   const previousPage = () => {
     if (page > 0) {
@@ -120,38 +151,52 @@ function Hackathons() {
     }
   };
 
-  /* Close modal with ESC */
+  // =====================================================
+  // ESCAPE + BODY SCROLL LOCK
+  // =====================================================
+
   useEffect(() => {
     const handleEscape = (event) => {
       if (event.key === "Escape") {
-        setSelectedHackathon(null);
+        closeHackathon();
       }
     };
 
     if (selectedHackathon) {
       document.body.style.overflow = "hidden";
-      window.addEventListener("keydown", handleEscape);
+
+      window.addEventListener(
+        "keydown",
+        handleEscape
+      );
     }
 
     return () => {
       document.body.style.overflow = "";
-      window.removeEventListener("keydown", handleEscape);
+
+      window.removeEventListener(
+        "keydown",
+        handleEscape
+      );
     };
   }, [selectedHackathon]);
 
   return (
     <>
       {/* =====================================================
-          HACKATHONS SECTION
-      ====================================================== */}
+          HACKATHONS
+      ===================================================== */}
 
       <section
         id="hackathons"
-        className="w-full overflow-hidden bg-[#F0E4B8] px-6 py-24 sm:px-8 lg:px-10 lg:py-32"
+        className="w-full overflow-hidden bg-[#F0E4B8] px-4 py-20 sm:px-6 sm:py-24 lg:px-10 lg:py-32"
       >
-        <div className="mx-auto max-w-7xl">
+        <div className="mx-auto w-full max-w-7xl">
 
-          {/* Heading */}
+          {/* =================================================
+              HEADING
+          ================================================= */}
+
           <motion.div
             initial={{
               opacity: 0,
@@ -169,13 +214,13 @@ function Hackathons() {
               duration: 0.8,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="mb-14"
+            className="mb-10 sm:mb-14"
           >
-            <p className="mb-4 text-sm font-semibold uppercase tracking-[0.25em] text-[#596A99]">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-[#596A99] sm:text-sm">
               Hackathons
             </p>
 
-            <h2 className="max-w-3xl text-4xl font-black tracking-[-0.03em] text-[#3A4A78] sm:text-5xl lg:text-6xl">
+            <h2 className="max-w-3xl text-4xl font-black leading-[0.95] tracking-[-0.04em] text-[#3A4A78] sm:text-5xl lg:text-6xl">
               Competing,
               <br />
 
@@ -185,9 +230,9 @@ function Hackathons() {
             </h2>
           </motion.div>
 
-          {/* =====================================================
+          {/* =================================================
               CARDS
-          ====================================================== */}
+          ================================================= */}
 
           <div className="relative">
             <AnimatePresence mode="wait">
@@ -209,7 +254,7 @@ function Hackathons() {
                   duration: 0.45,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="grid gap-7 md:grid-cols-2 lg:grid-cols-3"
+                className="grid grid-cols-1 items-stretch gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-3"
               >
                 {visibleHackathons.map(
                   (hackathon, index) => (
@@ -217,7 +262,7 @@ function Hackathons() {
                       key={hackathon.id}
                       type="button"
                       onClick={() =>
-                        setSelectedHackathon(hackathon)
+                        openHackathon(hackathon)
                       }
                       initial={{
                         opacity: 0,
@@ -231,34 +276,73 @@ function Hackathons() {
                         duration: 0.5,
                         delay: index * 0.08,
                       }}
-                      className="group text-left"
+                      className="group flex h-full min-w-0 text-left"
                     >
-                      <div className="overflow-hidden rounded-[28px] border border-[#D9CC9C] bg-[#F5EBCB] shadow-[0_18px_50px_rgba(58,74,120,0.08)] transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-[0_25px_60px_rgba(58,74,120,0.16)]">
+                      <div
+                        className="
+                          flex
+                          h-full
+                          w-full
+                          flex-col
+                          overflow-hidden
+                          rounded-[22px]
+                          border
+                          border-[#D9CC9C]
+                          bg-[#F5EBCB]
+                          shadow-[0_18px_50px_rgba(58,74,120,0.08)]
+                          transition-all
+                          duration-500
+                          group-hover:-translate-y-2
+                          group-hover:shadow-[0_25px_60px_rgba(58,74,120,0.16)]
+                          sm:rounded-[26px]
+                        "
+                      >
 
-                        {/* Image */}
-                        <div className="relative aspect-[4/3] overflow-hidden bg-[#D9CC9C]">
+                        {/* =================================================
+                            CARD IMAGE
+                        ================================================= */}
+
+                        <div
+                          className="
+                            relative
+                            h-[270px]
+                            min-h-[270px]
+                            w-full
+                            shrink-0
+                            overflow-hidden
+                            bg-[#D9CC9C]
+                            sm:h-[280px]
+                            sm:min-h-[280px]
+                          "
+                        >
                           <img
                             src={hackathon.image}
                             alt={hackathon.title}
-                            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            className="
+                              absolute
+                              inset-0
+                              block
+                              h-full
+                              w-full
+                              object-cover
+                              object-top
+                            "
                           />
 
-                          <div className="absolute inset-0 bg-gradient-to-t from-[#26365F]/80 via-transparent to-transparent opacity-70" />
+                          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#26365F]/80 via-transparent to-transparent opacity-70" />
 
-                          {/* Achievement */}
-                          <div className="absolute left-5 top-5">
-                            <span className="inline-flex rounded-full bg-white/90 px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] text-[#3A4A78] shadow-lg backdrop-blur-sm">
+                          <div className="absolute left-3 top-3 sm:left-5 sm:top-5">
+                            <span className="inline-flex max-w-[calc(100vw-70px)] rounded-full bg-white/90 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.1em] text-[#3A4A78] shadow-lg backdrop-blur-sm sm:px-4 sm:py-2 sm:text-xs">
                               {hackathon.achievement}
                             </span>
                           </div>
 
-                          {/* Arrow */}
-                          <div className="absolute bottom-5 right-5 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[#3A4A78] opacity-0 shadow-lg transition-all duration-300 group-hover:opacity-100">
+                          <div className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-[#3A4A78] shadow-lg transition-all duration-300 sm:bottom-5 sm:right-5 sm:h-10 sm:w-10 sm:opacity-0 sm:group-hover:opacity-100">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 24 24"
                               fill="none"
-                              className="h-5 w-5"
+                              className="h-4 w-4 sm:h-5 sm:w-5"
                             >
                               <path
                                 d="M5 12h14M13 6l6 6-6 6"
@@ -271,21 +355,25 @@ function Hackathons() {
                           </div>
                         </div>
 
-                        {/* Card Content */}
-                        <div className="p-6">
-                          <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-[#596A99]">
+                        {/* =================================================
+                            CARD CONTENT
+                        ================================================= */}
+
+                        <div className="flex flex-1 flex-col p-4 sm:p-6">
+
+                          <p className="mb-2 shrink-0 text-[9px] font-bold uppercase tracking-[0.16em] text-[#596A99] sm:text-xs">
                             {hackathon.achievement}
                           </p>
 
-                          <h3 className="text-xl font-bold leading-tight text-[#3A4A78] sm:text-2xl">
+                          <h3 className="shrink-0 text-lg font-bold leading-tight text-[#3A4A78] sm:text-xl lg:text-2xl">
                             {hackathon.title}
                           </h3>
 
-                          <p className="mt-4 line-clamp-3 text-sm leading-6 text-[#596A99]">
+                          <p className="mt-3 line-clamp-3 text-xs leading-5 text-[#596A99] sm:mt-4 sm:text-sm sm:leading-6">
                             {hackathon.description}
                           </p>
 
-                          <div className="mt-6 flex items-center gap-2 text-sm font-bold text-[#3A4A78]">
+                          <div className="mt-auto flex items-center gap-2 pt-5 text-xs font-bold text-[#3A4A78] sm:pt-6 sm:text-sm">
                             View Details
 
                             <span className="transition-transform duration-300 group-hover:translate-x-1">
@@ -300,26 +388,25 @@ function Hackathons() {
               </motion.div>
             </AnimatePresence>
 
-            {/* =====================================================
+            {/* =================================================
                 PAGINATION
-            ====================================================== */}
+            ================================================= */}
 
             {totalPages > 1 && (
-              <div className="mt-10 flex items-center justify-center gap-5">
+              <div className="mt-8 flex items-center justify-center gap-4 sm:mt-10 sm:gap-5">
 
-                {/* Previous */}
                 <button
                   type="button"
                   onClick={previousPage}
                   disabled={page === 0}
                   aria-label="Previous hackathons"
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-[#3A4A78]/20 bg-[#F5EBCB] text-[#3A4A78] transition-all duration-300 hover:-translate-x-1 hover:border-[#3A4A78] hover:bg-[#3A4A78] hover:text-white disabled:pointer-events-none disabled:opacity-30"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-[#3A4A78]/20 bg-[#F5EBCB] text-[#3A4A78] transition-all duration-300 hover:-translate-x-1 hover:border-[#3A4A78] hover:bg-[#3A4A78] hover:text-white disabled:pointer-events-none disabled:opacity-30 sm:h-12 sm:w-12"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="none"
-                    className="h-5 w-5"
+                    className="h-4 w-4 sm:h-5 sm:w-5"
                   >
                     <path
                       d="M19 12H5M11 6l-6 6 6 6"
@@ -331,12 +418,10 @@ function Hackathons() {
                   </svg>
                 </button>
 
-                {/* Page */}
-                <div className="text-sm font-semibold text-[#596A99]">
+                <div className="text-xs font-semibold text-[#596A99] sm:text-sm">
                   {page + 1} / {totalPages}
                 </div>
 
-                {/* Next */}
                 <button
                   type="button"
                   onClick={nextPage}
@@ -344,13 +429,13 @@ function Hackathons() {
                     page === totalPages - 1
                   }
                   aria-label="Next hackathons"
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-[#3A4A78]/20 bg-[#F5EBCB] text-[#3A4A78] transition-all duration-300 hover:translate-x-1 hover:border-[#3A4A78] hover:bg-[#3A4A78] hover:text-white disabled:pointer-events-none disabled:opacity-30"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-[#3A4A78]/20 bg-[#F5EBCB] text-[#3A4A78] transition-all duration-300 hover:translate-x-1 hover:border-[#3A4A78] hover:bg-[#3A4A78] hover:text-white disabled:pointer-events-none disabled:opacity-30 sm:h-12 sm:w-12"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="none"
-                    className="h-5 w-5"
+                    className="h-4 w-4 sm:h-5 sm:w-5"
                   >
                     <path
                       d="M5 12h14M13 6l6 6-6 6"
@@ -368,14 +453,13 @@ function Hackathons() {
       </section>
 
       {/* =====================================================
-          COMPACT MOBILE-FRIENDLY MODAL
-          PHOTO TOP + TEXT BOTTOM
-      ====================================================== */}
+          MODAL
+      ===================================================== */}
 
       <AnimatePresence>
         {selectedHackathon && (
           <motion.div
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#26365F]/70 p-2 backdrop-blur-md sm:p-4"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#26365F]/75 p-2 backdrop-blur-md sm:p-4"
             initial={{
               opacity: 0,
             }}
@@ -390,10 +474,17 @@ function Hackathons() {
                 event.target ===
                 event.currentTarget
               ) {
-                setSelectedHackathon(null);
+                closeHackathon();
               }
             }}
           >
+
+            {/* =================================================
+                MODAL
+
+                Width is calculated from IMAGE RATIO.
+            ================================================= */}
+
             <motion.div
               initial={{
                 opacity: 0,
@@ -414,17 +505,60 @@ function Hackathons() {
                 duration: 0.25,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="relative w-full max-w-[520px] overflow-hidden rounded-[20px] bg-[#F0E4B8] shadow-2xl"
+              style={
+                imageRatio
+                  ? {
+                      width: `min(90vw, calc(54vh * ${imageRatio}))`,
+                    }
+                  : undefined
+              }
+              className="
+                relative
+                flex
+                max-h-[90vh]
+                w-[90vw]
+                flex-col
+                overflow-hidden
+                rounded-[18px]
+                bg-[#F0E4B8]
+                shadow-2xl
+                sm:max-h-[88vh]
+                sm:rounded-[22px]
+              "
             >
 
-              {/* Close */}
+              {/* =================================================
+                  CLOSE BUTTON
+              ================================================= */}
+
               <button
                 type="button"
-                onClick={() =>
-                  setSelectedHackathon(null)
-                }
+                onClick={closeHackathon}
                 aria-label="Close"
-                className="absolute right-2.5 top-2.5 z-30 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-[#3A4A78] shadow-md transition-all duration-300 hover:rotate-90 hover:bg-[#3A4A78] hover:text-white"
+                className="
+                  absolute
+                  right-2.5
+                  top-2.5
+                  z-30
+                  flex
+                  h-8
+                  w-8
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-white/95
+                  text-[#3A4A78]
+                  shadow-md
+                  transition-all
+                  duration-300
+                  hover:rotate-90
+                  hover:bg-[#3A4A78]
+                  hover:text-white
+                  sm:right-3.5
+                  sm:top-3.5
+                  sm:h-9
+                  sm:w-9
+                "
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -442,21 +576,55 @@ function Hackathons() {
               </button>
 
               {/* =================================================
-                  MODAL PHOTO
-              ================================================== */}
+                  IMAGE AREA
 
-              <div className="relative h-[120px] w-full overflow-hidden bg-[#D9CC9C] sm:h-[180px]">
+                  The image itself controls the width.
+              ================================================= */}
+
+              <div
+                className="
+                  relative
+                  w-full
+                  shrink-0
+                  overflow-hidden
+                  bg-transparent
+                "
+              >
                 <img
                   src={selectedHackathon.image}
                   alt={selectedHackathon.title}
-                  className="h-full w-full object-cover"
+                  onLoad={(event) => {
+                    const image =
+                      event.currentTarget;
+
+                    if (
+                      image.naturalWidth &&
+                      image.naturalHeight
+                    ) {
+                      setImageRatio(
+                        image.naturalWidth /
+                          image.naturalHeight
+                      );
+                    }
+                  }}
+                  className="
+                    mx-auto
+                    block
+                    h-auto
+                    w-full
+                    max-h-[54vh]
+                    object-contain
+                  "
                 />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-[#26365F]/65 via-transparent to-transparent" />
+                {/* Gradient */}
+
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#26365F]/65 via-transparent to-transparent" />
 
                 {/* Achievement */}
+
                 <div className="absolute bottom-2.5 left-3">
-                  <span className="inline-flex rounded-full bg-white/95 px-2.5 py-1 text-[8px] font-bold uppercase tracking-[0.1em] text-[#3A4A78] shadow">
+                  <span className="inline-flex max-w-[calc(100vw-70px)] rounded-full bg-white/95 px-2.5 py-1 text-[8px] font-bold uppercase tracking-[0.1em] text-[#3A4A78] shadow sm:px-3">
                     {selectedHackathon.achievement}
                   </span>
                 </div>
@@ -464,35 +632,47 @@ function Hackathons() {
 
               {/* =================================================
                   MODAL CONTENT
-              ================================================== */}
+              ================================================= */}
 
-              <div className="px-4 py-4 sm:px-6 sm:py-5">
+              <div className="w-full shrink-0 px-4 py-3 sm:px-5 sm:py-3.5">
 
                 <p className="text-[8px] font-bold uppercase tracking-[0.18em] text-[#596A99]">
                   Hackathon Experience
                 </p>
 
-                <h2 className="mt-1.5 text-xl font-black leading-tight tracking-[-0.02em] text-[#3A4A78] sm:text-2xl">
+                <h2 className="mt-1 break-words text-lg font-black leading-tight tracking-[-0.02em] text-[#3A4A78] sm:text-xl">
                   {selectedHackathon.title}
                 </h2>
 
-                <div className="mt-2.5 h-px w-10 bg-[#596A99]/40" />
+                <div className="mt-1.5 h-px w-9 bg-[#596A99]/40" />
 
-                <p className="mt-3 text-[11px] leading-[1.55] text-[#596A99] sm:text-xs">
+                <p className="mt-2 text-[10px] leading-[1.4] text-[#596A99] sm:text-[11px] sm:leading-[1.45]">
                   {selectedHackathon.description}
                 </p>
 
-                <p className="mt-2 text-[11px] leading-[1.55] text-[#596A99] sm:text-xs">
+                <p className="mt-1.5 text-[10px] leading-[1.4] text-[#596A99] sm:text-[11px] sm:leading-[1.45]">
                   {selectedHackathon.details}
                 </p>
 
-                {/* Close */}
                 <button
                   type="button"
-                  onClick={() =>
-                    setSelectedHackathon(null)
-                  }
-                  className="mt-3 rounded-full bg-[#3A4A78] px-4 py-2 text-[10px] font-semibold text-white transition-all duration-300 hover:bg-[#2F3D68]"
+                  onClick={closeHackathon}
+                  className="
+                    mt-2.5
+                    rounded-full
+                    bg-[#3A4A78]
+                    px-4
+                    py-1.5
+                    text-[9px]
+                    font-semibold
+                    text-white
+                    transition-all
+                    duration-300
+                    hover:bg-[#2F3D68]
+                    sm:px-4
+                    sm:py-1.5
+                    sm:text-[10px]
+                  "
                 >
                   Close
                 </button>
