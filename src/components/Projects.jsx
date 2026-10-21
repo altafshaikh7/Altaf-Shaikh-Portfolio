@@ -64,7 +64,7 @@ const projects = [
     github:
       "https://github.com/altafshaikh7/mockhire-video-interview-platform",
 
-    live: "https://mock-hire.onrender.com",
+    live: "https://mockhire-video-interview-platform.vercel.app/",
   },
 
   {
