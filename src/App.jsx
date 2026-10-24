@@ -7,15 +7,8 @@ import Hackathons from "./components/Hackathons";
 import Certificates from "./components/Certificates";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
-import PrivacyPolicy from "./components/PrivacyPolicy";
 
 function App() {
-  const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
-
-  if (currentPath === "/privacy-policy") {
-    return <PrivacyPolicy />;
-  }
-
   return (
     <div className="min-h-screen w-full bg-[#F0E4B8]">
       <Navbar />
