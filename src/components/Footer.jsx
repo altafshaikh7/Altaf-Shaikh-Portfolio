@@ -304,6 +304,13 @@ const Footer = () => {
               ♥
             </span>
           </p>
+
+          <a
+            href="/privacy-policy"
+            className="font-semibold transition-colors hover:text-[#3A4A78] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#3A4A78]"
+          >
+            Privacy Policy
+          </a>
         </div>
       </div>
 
