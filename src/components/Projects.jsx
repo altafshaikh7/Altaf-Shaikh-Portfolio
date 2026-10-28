@@ -9,6 +9,34 @@ const projects = [
   // =====================================================
 
   {
+    id: 9,
+    title: "ApnaVault",
+    category: "Full Stack",
+    language: "TypeScript",
+    image: null,
+
+    shortDescription:
+      "A personal document management platform designed to help individuals and families organize and access their important documents in one place.",
+
+    description:
+      "ApnaVault is a personal document management platform focused on helping individuals and families organize and access important personal documents in one place.",
+
+    technologies: [
+      "React",
+      "TypeScript",
+      "Vite",
+      "Node.js",
+      "Express.js",
+      "MongoDB Atlas",
+      "Supabase Storage",
+    ],
+
+    github: "https://github.com/altafshaikh7/ApnaVault",
+
+    live: "https://apna-vault-pprl.vercel.app/",
+  },
+
+  {
     id: 1,
     title: "SyncSpace",
     category: "Full Stack",
