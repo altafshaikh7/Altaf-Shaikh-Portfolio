@@ -13,7 +13,7 @@ const projects = [
     title: "ApnaVault",
     category: "Full Stack",
     language: "TypeScript",
-    image: null,
+    image: "/project/apnavault.png",
 
     shortDescription:
       "A personal document management platform designed to help individuals and families organize and access their important documents in one place.",
