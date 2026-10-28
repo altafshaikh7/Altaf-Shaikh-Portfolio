@@ -960,6 +960,8 @@ function Projects() {
 // =========================================================
 
 function ProjectCard({ project, index = 0, onOpen }) {
+  const isApnaVault = project.title === "ApnaVault";
+
   return (
     <article
       onClick={onOpen}
@@ -983,13 +985,21 @@ function ProjectCard({ project, index = 0, onOpen }) {
           IMAGE
       ================================================= */}
 
-      <div className="w-full overflow-hidden rounded-[17px] bg-[#D9CC9C] sm:rounded-[19px]">
+      <div
+        className={`w-full overflow-hidden rounded-[17px] bg-[#D9CC9C] sm:rounded-[19px] ${
+          isApnaVault ? "aspect-[1901/1018]" : ""
+        }`}
+      >
 
         {project.image ? (
           <img
             src={project.image}
             alt={project.title}
-            className="block h-auto w-full object-contain"
+            className={`block w-full ${
+              isApnaVault
+                ? "h-full object-cover object-center"
+                : "h-auto object-contain"
+            }`}
             onError={(event) => {
               event.currentTarget.style.display =
                 "none";
@@ -1168,6 +1178,8 @@ function ProjectCard({ project, index = 0, onOpen }) {
 // =========================================================
 
 function ProjectModal({ project, onClose }) {
+  const isApnaVault = project.title === "ApnaVault";
+
   return (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-[#26365F]/75 p-2 backdrop-blur-md sm:p-4"
@@ -1202,21 +1214,21 @@ function ProjectModal({ project, onClose }) {
             MODAL IMAGE
         ================================================= */}
 
-        <div className="flex w-full items-center justify-center overflow-hidden bg-[#D9CC9C]">
+        <div
+          className={`flex w-full items-center justify-center overflow-hidden bg-[#D9CC9C] ${
+            isApnaVault ? "aspect-[1901/1018]" : ""
+          }`}
+        >
 
           {project.image ? (
             <img
               src={project.image}
               alt={project.title}
-              className="
-                block
-                h-auto
-                w-auto
-                max-h-[38vh]
-                max-w-full
-                object-contain
-                sm:max-h-[44vh]
-              "
+              className={
+                isApnaVault
+                  ? "block h-full w-full object-cover object-center"
+                  : "block h-auto w-auto max-h-[38vh] max-w-full object-contain sm:max-h-[44vh]"
+              }
             />
           ) : (
             /* =================================================
