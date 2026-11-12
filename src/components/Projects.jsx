@@ -9,6 +9,34 @@ const projects = [
   // =====================================================
 
   {
+    id: 10,
+    title: "New India Automotive",
+    category: "Full Stack",
+    language: "TypeScript",
+    image: "/project/new-india-automotive.png",
+
+    shortDescription:
+      "A responsive business website for a Mumbai-based commercial vehicle accident repair company, featuring services, repair galleries, insurance assistance, and appointment booking.",
+
+    description:
+      "A professional, responsive business website for New India Automotive, a commercial vehicle accident repair company established in 2017 and based in Mumbai, Maharashtra. Customers can explore repair services, supported automotive brands, insurance assistance, company information, awards, before-and-after repair galleries, and appointment booking. The site also includes contact and WhatsApp integration, plus SEO optimization with a sitemap and robots.txt.",
+
+    technologies: [
+      "Next.js 16",
+      "React 19",
+      "TypeScript",
+      "Tailwind CSS",
+      "shadcn/ui",
+      "Lucide React",
+      "Vercel",
+    ],
+
+    github: "https://github.com/altafshaikh7/new-india-automotive",
+
+    live: "https://new-india-automotive.vercel.app/",
+  },
+
+  {
     id: 9,
     title: "ApnaVault",
     category: "Full Stack",
@@ -1224,55 +1252,72 @@ function ProjectModal({ project, onClose }) {
             <img
               src={project.image}
               alt={project.title}
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+
+                const fallback =
+                  event.currentTarget.parentElement?.querySelector(
+                    ".modal-image-fallback"
+                  );
+
+                if (fallback) {
+                  fallback.classList.remove("hidden");
+                }
+              }}
               className={
                 isApnaVault
                   ? "block h-full w-full object-cover object-center"
                   : "block h-auto w-auto max-h-[38vh] max-w-full object-contain sm:max-h-[44vh]"
               }
             />
-          ) : (
-            /* =================================================
-              FALLBACK
-            ================================================= */
+          ) : null}
 
-            <div className="relative flex h-[170px] w-full items-center justify-center overflow-hidden bg-gradient-to-br from-[#3A4A78] via-[#596A99] to-[#26365F] sm:h-[210px]">
+          {/* =================================================
+            FALLBACK
+          ================================================= */}
 
-              <div className="absolute -right-16 -top-16 h-52 w-52 rounded-full border border-white/10" />
+          <div
+            className={`modal-image-fallback relative flex h-[170px] w-full items-center justify-center overflow-hidden bg-gradient-to-br from-[#3A4A78] via-[#596A99] to-[#26365F] sm:h-[210px] ${
+            project.image ? "hidden" : ""
+            }`}
+          >
 
-              <div className="absolute -bottom-20 -left-16 h-60 w-60 rounded-full border border-white/10" />
+            <div className="absolute -right-16 -top-16 h-52 w-52 rounded-full border border-white/10" />
 
-              <div className="relative z-10 text-center">
+            <div className="absolute -bottom-20 -left-16 h-60 w-60 rounded-full border border-white/10" />
 
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-[18px] border border-white/20 bg-white/10 backdrop-blur-md">
+            <div className="relative z-10 text-center">
 
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    className="h-7 w-7 text-white"
-                  >
-                    <path
-                      d="M4 5.5C4 4.67 4.67 4 5.5 4h13C19.33 4 20 4.67 20 5.5v13c0 .83-.67 1.5-1.5 1.5h-13C4.67 20 4 19.33 4 18.5v-13Z"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    />
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-[18px] border border-white/20 bg-white/10 backdrop-blur-md">
 
-                    <path
-                      d="M7 8h10M7 12h5M7 16h7"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                  </svg>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                className="h-7 w-7 text-white"
+              >
+                <path
+                  d="M4 5.5C4 4.67 4.67 4 5.5 4h13C19.33 4 20 4.67 20 5.5v13c0 .83-.67 1.5-1.5 1.5h-13C4.67 20 4 19.33 4 18.5v-13Z"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                />
 
-                </div>
+                <path
+                  d="M7 8h10M7 12h5M7 16h7"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+              </svg>
 
-                <p className="mt-3 text-lg font-black text-white">
-                  {project.title}
-                </p>
-
-              </div>
             </div>
-          )}
+
+            <p className="mt-3 text-lg font-black text-white">
+              {project.title}
+            </p>
+
+            </div>
+
+          </div>
 
         </div>
 
